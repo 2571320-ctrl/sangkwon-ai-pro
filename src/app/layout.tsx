@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { ChatSidebar } from '@/components/chat/ChatSidebar'
+import { MobileLayout } from '@/components/layout/MobileLayout'
 
 export const metadata: Metadata = {
   title: '상권연구소 AI PRO',
@@ -11,18 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body className="bg-white text-slate-900 antialiased">
-        <div className="flex h-screen">
-          {/* no-print: sidebar는 인쇄에서 제외 */}
-          <div className="no-print shrink-0">
-            <ChatSidebar />
-          </div>
-          <main
-            id="main-scroll"
-            className="flex-1 min-w-0 overflow-y-auto"
-          >
-            {children}
-          </main>
-        </div>
+        <MobileLayout>{children}</MobileLayout>
       </body>
     </html>
   )

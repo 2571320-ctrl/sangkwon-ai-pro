@@ -382,7 +382,7 @@ export default function ComparePage() {
         <p className="text-slate-500 text-sm">두 후보 점포를 동일한 기준으로 비교합니다. 각 점포 정보를 입력하세요.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <MiniStoreForm label="A" form={formA} />
         <MiniStoreForm label="B" form={formB} />
       </div>
