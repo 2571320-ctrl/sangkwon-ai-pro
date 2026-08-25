@@ -135,7 +135,7 @@ function scoreCompetition(store: Store): ScoreDetail {
   return {
     ...r,
     label: '경쟁위험',
-    interpretation: `${store.desiredBusiness} 동종업종 경쟁강도 검토 (테스트 데이터 기준)`,
+    interpretation: `${store.desiredBusiness} 동종업종 경쟁환경 데이터 미연결 — 현장 직접 확인 필요`,
   }
 }
 
@@ -291,23 +291,29 @@ function genContractChecks(store: Store): ContractCheck[] {
   const isFoodOrBar = isBarOrFood(biz)
 
   const base: ContractCheck[] = [
-    { id: 'building-use', category: '건물', item: '건물 용도 확인 (주용도 및 부속용도)', status: 'unchecked', note: '' },
-    { id: 'biz-reg', category: '행정', item: '영업신고 또는 허가 가능 여부', status: 'unchecked', note: '' },
-    { id: 'prev-op', category: '행정', item: '기존 영업자 폐업 여부 확인', status: 'unchecked', note: '' },
-    { id: 'parking-actual', category: '시설', item: '주차 실제 사용 가능 여부 (구획 여부)', status: 'unchecked', note: '' },
-    { id: 'signage', category: '시설', item: '간판 설치 위치 및 크기 제한 확인', status: 'unchecked', note: '' },
-    { id: 'fire', category: '시설', item: '소방시설 현황 및 소방검사 통과 여부', status: 'unchecked', note: '' },
-    { id: 'restroom', category: '시설', item: '화장실 위치 및 전용 여부', status: 'unchecked', note: '' },
-    { id: 'mgmt-rule', category: '건물', item: '건물 관리규약 및 공용부 사용 제한', status: 'unchecked', note: '' },
+    { id: 'building-use', category: '건물', item: '건물 용도 확인 (주용도·부속용도 — 업종 허가 가능 여부)', status: 'unchecked', note: '' },
+    { id: 'biz-reg', category: '행정', item: `${biz} 영업신고 또는 인허가 가능 여부 사전 확인`, status: 'unchecked', note: '' },
+    { id: 'prev-op', category: '행정', item: '기존 영업자 폐업 완료 여부 및 행정처분 이력 확인', status: 'unchecked', note: '' },
+    { id: 'register', category: '법률', item: '건물 등기부등본 열람 — 근저당·압류·가처분 여부', status: 'unchecked', note: '' },
+    { id: 'lease-term', category: '계약', item: '임대차 기간 및 갱신 조건 명시 여부 (최소 2년 권고)', status: 'unchecked', note: '' },
+    { id: 'rent-increase', category: '계약', item: '임대료 인상률 상한 및 인상 조건 계약서 명시', status: 'unchecked', note: '' },
+    { id: 'sublease', category: '계약', item: '전대차 가능 여부 및 임대인 동의 조건', status: 'unchecked', note: '' },
+    { id: 'parking-actual', category: '시설', item: '주차 실제 사용 가능 여부 (구획 지정 여부, 공용/전용 구분)', status: 'unchecked', note: '' },
+    { id: 'signage', category: '시설', item: '간판 설치 위치·크기 제한 확인 (건물주 및 행정 기준)', status: 'unchecked', note: '' },
+    { id: 'fire', category: '시설', item: '소방시설 현황 및 최근 소방검사 통과 여부', status: 'unchecked', note: '' },
+    { id: 'restroom', category: '시설', item: '화장실 위치·전용 여부, 장애인 화장실 기준 적합 여부', status: 'unchecked', note: '' },
+    { id: 'electric-cap', category: '전기', item: '전기 용량 확인 (계약 전력 kW — 영업 설비 가동 가능 여부)', status: 'unchecked', note: '' },
+    { id: 'mgmt-rule', category: '건물', item: '건물 관리규약 및 공용부 사용 제한 사항 확인', status: 'unchecked', note: '' },
+    { id: 'premium-basis', category: '권리금', item: store.premium > 0 ? '권리금 발생 근거(시설·영업·바닥) 구분 및 협상 여지 확인' : '권리금 없음 — 계약서에 미발생 명시 권고', status: 'unchecked', note: '' },
   ]
 
   if (isFoodOrBar) {
     return [
-      { id: 'duct', category: '주방', item: '닥트(환기) 설치 가능 여부 및 위치', status: 'unchecked', note: '' },
-      { id: 'electric', category: '전기', item: '전기용량 확인 (주방 설비 가동 여부)', status: 'unchecked', note: '' },
-      { id: 'gas', category: '주방', item: '도시가스 인입 여부', status: 'unchecked', note: '' },
-      { id: 'drainage', category: '주방', item: '주방 배수 용량 및 역류 여부', status: 'unchecked', note: '' },
-      { id: 'sewage', category: '주방', item: '하수 역류 이력 및 현황', status: 'unchecked', note: '' },
+      { id: 'duct', category: '주방', item: '닥트(환기) 설치 가능 여부 및 배기구 위치 확인', status: 'unchecked', note: '' },
+      { id: 'gas', category: '주방', item: '도시가스 인입 여부 및 공급 용량', status: 'unchecked', note: '' },
+      { id: 'drainage', category: '주방', item: '주방 배수 용량·구배 및 역류 여부 현장 확인', status: 'unchecked', note: '' },
+      { id: 'sewage', category: '주방', item: '하수 역류 이력 및 현황 — 임대인 서면 확인 권고', status: 'unchecked', note: '' },
+      { id: 'grease-trap', category: '주방', item: '그리스 트랩(기름막이) 설치 여부 및 용량', status: 'unchecked', note: '' },
       ...base,
     ]
   }
@@ -318,12 +324,12 @@ function genContractChecks(store: Store): ContractCheck[] {
 function genMarketData(store: Store): MarketData {
   const biz = store.desiredBusiness
   return {
-    mainCustomerAge: '30~40대',
-    competitorCount: 17,
-    newStores: 5,
-    closedStores: 4,
-    salesChange: -8.4,
-    interpretation: `상권 전체 매출이 최근 8.4% 감소하고 있지만 ${biz} 업종의 수요까지 동일하게 감소했다고 단정할 수 없습니다. 동종업종의 매출 변화와 신규·폐업 흐름을 함께 확인해야 합니다. 신규 5곳, 폐업 4곳으로 순유입이 유지되고 있어 수요가 완전히 소멸된 상권은 아닙니다.`,
+    mainCustomerAge: '데이터 미연결',
+    competitorCount: -1,
+    newStores: -1,
+    closedStores: -1,
+    salesChange: 0,
+    interpretation: `${biz} 업종의 상권 경쟁환경 데이터는 현재 연결되지 않았습니다. 현장 방문 시 동종업종 경쟁점 수와 신규·폐업 현황을 직접 파악하여 판단하십시오.`,
   }
 }
 
@@ -387,27 +393,43 @@ export function compareStores(
   analysisA: AnalysisResult,
   analysisB: AnalysisResult,
 ): import('@/types').ComparisonResult {
+  const addrA = storeA.address || storeA.name || '후보 A'
+  const addrB = storeB.address || storeB.name || '후보 B'
+
+  const visLabel = (v: string) =>
+    v === 'excellent' ? '우수' : v === 'good' ? '양호' : v === 'average' ? '보통' : '불량'
+  const visRank = ['excellent', 'good', 'average', 'poor']
+
   const items: import('@/types').ComparisonItem[] = [
     {
       category: '위치 · 층수',
       labelA: `${FLOOR_LABELS[storeA.floor]}`,
       labelB: `${FLOOR_LABELS[storeB.floor]}`,
       advantageFor: storeA.floor === '1f' && storeB.floor !== '1f' ? 'A' : storeB.floor === '1f' && storeA.floor !== '1f' ? 'B' : 'equal',
-      interpretation: `${storeA.name}은 ${FLOOR_LABELS[storeA.floor]}, ${storeB.name}은 ${FLOOR_LABELS[storeB.floor]} 위치입니다.`,
+      interpretation: `후보 A는 ${FLOOR_LABELS[storeA.floor]}, 후보 B는 ${FLOOR_LABELS[storeB.floor]} 위치입니다.`,
     },
     {
       category: '면적',
       labelA: `${storeA.areaPyeong}평`,
       labelB: `${storeB.areaPyeong}평`,
       advantageFor: storeA.areaPyeong > storeB.areaPyeong ? 'A' : storeA.areaPyeong < storeB.areaPyeong ? 'B' : 'equal',
-      interpretation: `면적은 후보 A ${storeA.areaPyeong}평, 후보 B ${storeB.areaPyeong}평으로 업종 운영에 필요한 규모를 기준으로 비교가 필요합니다.`,
+      interpretation: `면적 A ${storeA.areaPyeong}평, B ${storeB.areaPyeong}평 — 희망 업종 운영에 필요한 규모를 기준으로 비교하십시오.`,
     },
     {
       category: '전면폭',
       labelA: `${storeA.frontageMeters}m`,
       labelB: `${storeB.frontageMeters}m`,
       advantageFor: storeA.frontageMeters > storeB.frontageMeters ? 'A' : storeA.frontageMeters < storeB.frontageMeters ? 'B' : 'equal',
-      interpretation: `전면폭이 넓을수록 외부 노출성이 높습니다. 후보 A(${storeA.frontageMeters}m) vs 후보 B(${storeB.frontageMeters}m).`,
+      interpretation: `전면폭이 넓을수록 외부 노출성이 높습니다. A(${storeA.frontageMeters}m) vs B(${storeB.frontageMeters}m).`,
+    },
+    {
+      category: '가시성',
+      labelA: visLabel(storeA.visibility),
+      labelB: visLabel(storeB.visibility),
+      advantageFor:
+        visRank.indexOf(storeA.visibility) < visRank.indexOf(storeB.visibility) ? 'A' :
+        visRank.indexOf(storeA.visibility) > visRank.indexOf(storeB.visibility) ? 'B' : 'equal',
+      interpretation: '외부에서의 시인성이 높을수록 간판 효과와 신규 고객 유입에 유리합니다.',
     },
     {
       category: '보증금',
@@ -421,7 +443,7 @@ export function compareStores(
       labelA: formatMoney(storeA.monthlyRent),
       labelB: formatMoney(storeB.monthlyRent),
       advantageFor: storeA.monthlyRent < storeB.monthlyRent ? 'A' : storeA.monthlyRent > storeB.monthlyRent ? 'B' : 'equal',
-      interpretation: `월세는 후보 A ${formatMoney(storeA.monthlyRent)}, 후보 B ${formatMoney(storeB.monthlyRent)}입니다. 낮은 고정비가 손익 안전성에 유리합니다.`,
+      interpretation: `A ${formatMoney(storeA.monthlyRent)}, B ${formatMoney(storeB.monthlyRent)} — 낮은 고정비가 손익 안전성에 유리합니다.`,
     },
     {
       category: '주차',
@@ -431,22 +453,11 @@ export function compareStores(
       interpretation: '주차 가능 대수가 많을수록 차량 방문 고객 유입에 유리합니다.',
     },
     {
-      category: '가시성',
-      labelA: storeA.visibility === 'excellent' ? '우수' : storeA.visibility === 'good' ? '양호' : storeA.visibility === 'average' ? '보통' : '불량',
-      labelB: storeB.visibility === 'excellent' ? '우수' : storeB.visibility === 'good' ? '양호' : storeB.visibility === 'average' ? '보통' : '불량',
-      advantageFor:
-        ['excellent', 'good', 'average', 'poor'].indexOf(storeA.visibility) <
-        ['excellent', 'good', 'average', 'poor'].indexOf(storeB.visibility) ? 'A' :
-        ['excellent', 'good', 'average', 'poor'].indexOf(storeA.visibility) >
-        ['excellent', 'good', 'average', 'poor'].indexOf(storeB.visibility) ? 'B' : 'equal',
-      interpretation: '외부에서의 시인성이 높을수록 간판 효과와 신규 고객 유입에 유리합니다.',
-    },
-    {
       category: '입지 점수',
       labelA: `${analysisA.scores.location.score}점 (${analysisA.scores.location.grade})`,
       labelB: `${analysisB.scores.location.score}점 (${analysisB.scores.location.grade})`,
       advantageFor: analysisA.scores.location.score > analysisB.scores.location.score ? 'A' : analysisA.scores.location.score < analysisB.scores.location.score ? 'B' : 'equal',
-      interpretation: '입지 점수는 층수, 도보 접근성, 코너 여부를 종합한 수치입니다.',
+      interpretation: '층수, 도보 접근성, 코너 여부를 종합한 입지 점수입니다.',
     },
     {
       category: '임대료 부담',
@@ -474,14 +485,14 @@ export function compareStores(
   const aCount = items.filter(i => i.advantageFor === 'A').length
   const bCount = items.filter(i => i.advantageFor === 'B').length
 
-  const winnerName = aCount > bCount ? storeA.name : bCount > aCount ? storeB.name : null
   const winnerLabel = aCount > bCount ? '후보 A' : bCount > aCount ? '후보 B' : null
+  const winnerAddr = aCount > bCount ? addrA : bCount > aCount ? addrB : null
 
   const recommendation = winnerLabel
-    ? `${winnerLabel}(${winnerName})가 ${aCount > bCount ? aCount : bCount}개 항목에서 우위를 보입니다. 매출 목표가 충분히 확보될 수 있다면 ${winnerLabel}를 우선 검토할 수 있습니다.`
+    ? `${winnerLabel}(${winnerAddr})가 ${Math.max(aCount, bCount)}개 항목에서 우위를 보입니다. 매출 목표가 충분히 확보될 수 있다면 ${winnerLabel}를 우선 검토할 수 있습니다.`
     : '두 후보가 항목별로 균형잡힌 평가를 받았습니다. 희망 업종의 핵심 요건(가시성·주차·임대료)을 기준으로 최종 선택하십시오.'
 
-  const summary = `후보 A(${storeA.name})는 가시성 ${storeA.frontageMeters}m 전면, 주차 ${storeA.parkingCount}대, 월세 ${formatMoney(storeA.monthlyRent)} 조건입니다. 후보 B(${storeB.name})는 가시성 ${storeB.frontageMeters}m 전면, 주차 ${storeB.parkingCount}대, 월세 ${formatMoney(storeB.monthlyRent)} 조건입니다. 두 후보의 결정적 차이는 월세 부담과 가시성 조건이며, 현장 방문을 통해 실제 동선과 경쟁환경을 직접 확인하는 것이 중요합니다.`
+  const summary = `후보 A(${addrA})는 전면 ${storeA.frontageMeters}m, 주차 ${storeA.parkingCount}대, 월세 ${formatMoney(storeA.monthlyRent)} 조건입니다. 후보 B(${addrB})는 전면 ${storeB.frontageMeters}m, 주차 ${storeB.parkingCount}대, 월세 ${formatMoney(storeB.monthlyRent)} 조건입니다. 두 후보의 결정적 차이는 월세 부담과 가시성 조건이며, 현장 방문을 통해 실제 동선과 경쟁환경을 직접 확인하는 것이 중요합니다.`
 
   return {
     id: generateId(),

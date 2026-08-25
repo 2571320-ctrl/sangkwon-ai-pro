@@ -32,18 +32,34 @@ ${contextStr}
 }
 
 [extractedContext 필드 목록]
-- address: 문자열 (주소 또는 지역명)
+- address: 문자열 (주소 또는 지역명 — 점포명 대신 주소를 식별자로 사용)
 - desiredBusiness: 문자열 (업종명, 사용자 표현 그대로: 무인 뽑기방, 셀프사진관, 키즈카페 등)
+- currentBusiness: 문자열 (현재 운영 업종)
+- previousBusiness: 문자열 (이전 운영 업종)
 - floor: "1f" | "2f" | "3f" | "4f_plus" | "basement"
 - areaPyeong: 숫자 (평, 단위 제외)
 - frontageMeters: 숫자 (전면폭 미터, 단위 제외)
+- isCorner: boolean (코너 여부)
+- dualExposure: boolean (양면 노출 여부)
+- visibility: "excellent" | "good" | "average" | "poor"
 - parkingCount: 숫자 (주차 대수, 없음→0)
+- pedestrianAccess: "excellent" | "good" | "average" | "poor" (도보 접근성)
+- vehicleAccess: "excellent" | "good" | "average" | "poor" (차량 접근성)
+- publicTransportAccess: "excellent" | "good" | "average" | "poor" (대중교통)
+- elevator: boolean (엘리베이터 여부)
+- restroom: boolean (전용 화장실 여부)
+- duct: boolean (닥트/환기 설치 가능 여부)
+- cityGas: boolean (도시가스 인입 여부)
+- drainage: boolean (배수 양호 여부)
 - depositMan: 숫자 (보증금 만원 단위: 5000만원→5000, 1억→10000)
 - monthlyRentMan: 숫자 (월세 만원 단위: 250만원→250)
 - maintenanceFeeMan: 숫자 (관리비 만원 단위)
 - premiumMan: 숫자 (권리금 만원 단위, 없음→0)
-- visibility: "excellent" | "good" | "average" | "poor"
-- isCorner: boolean
+- vatIncluded: boolean (VAT 포함 여부)
+- estimatedInteriorCostMan: 숫자 (예상 인테리어 비용 만원 단위)
+- expectedMonthlySalesMan: 숫자 (예상 월매출 만원 단위)
+- contractPeriod: 문자열 (계약 기간, 예: "2년")
+- fieldMemo: 문자열 (현장 메모나 특이사항)
 
 [readyForAnalysis = true 조건] 기존 + 신규 정보를 합산하여 다음 3가지 모두 확인될 때:
 1. 주소 또는 지역명 (address)

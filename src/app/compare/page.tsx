@@ -8,11 +8,10 @@ import { analyzeStore, compareStores } from '@/lib/analysis/engine'
 import { saveStore, saveAnalysis, saveComparison } from '@/lib/storage'
 import { generateId, formatMoney, gradeColor } from '@/lib/utils'
 import { Store, ComparisonResult, FLOOR_LABELS } from '@/types'
-import { GitCompare, ChevronRight, Trophy } from 'lucide-react'
+import { GitCompare, ChevronRight, Trophy, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 
 const miniSchema = z.object({
-  name: z.string().min(1, '점포명을 입력하세요'),
   address: z.string().min(1, '주소를 입력하세요'),
   desiredBusiness: z.string().min(1, '희망 업종을 입력하세요'),
   floor: z.enum(['basement', '1f', '2f', '3f', '4f_plus']).default('1f'),
@@ -37,7 +36,7 @@ const selectClass = `${inputClass} cursor-pointer`
 function formToStore(data: MiniForm): Store {
   return {
     id: generateId(),
-    name: data.name,
+    name: data.address,
     address: data.address,
     desiredBusiness: data.desiredBusiness,
     currentBusiness: '',
@@ -61,23 +60,15 @@ function formToStore(data: MiniForm): Store {
   }
 }
 
-function MiniStoreForm({
-  label,
-  form,
-}: {
-  label: 'A' | 'B'
-  form: ReturnType<typeof useForm<MiniForm>>
-}) {
+function MiniStoreForm({ label, form }: { label: 'A' | 'B'; form: ReturnType<typeof useForm<MiniForm>> }) {
   const { register, formState: { errors }, watch, setValue } = form
   const isCorner = watch('isCorner')
-
   const accessOpts = [
     { value: 'excellent', label: '우수' },
     { value: 'good', label: '양호' },
     { value: 'average', label: '보통' },
     { value: 'poor', label: '불량' },
   ]
-
   const labelColor = label === 'A' ? 'bg-blue-600' : 'bg-emerald-600'
 
   return (
@@ -90,18 +81,14 @@ function MiniStoreForm({
       </div>
       <div className="p-5 space-y-3">
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">점포명</label>
-          <input {...register('name')} placeholder="점포명" className={inputClass} />
-          {errors.name && <p className="text-xs text-red-500 mt-0.5">{errors.name.message}</p>}
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">주소</label>
-          <input {...register('address')} placeholder="주소" className={inputClass} />
+          <label className="block text-xs font-semibold text-slate-600 mb-1">주소 <span className="text-red-500">*</span></label>
+          <input {...register('address')} placeholder="예: 천안시 서북구 두정동 877" className={inputClass} />
           {errors.address && <p className="text-xs text-red-500 mt-0.5">{errors.address.message}</p>}
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">희망 업종</label>
+          <label className="block text-xs font-semibold text-slate-600 mb-1">희망 업종 <span className="text-red-500">*</span></label>
           <input {...register('desiredBusiness')} placeholder="주점, 카페, 음식점 등" className={inputClass} />
+          {errors.desiredBusiness && <p className="text-xs text-red-500 mt-0.5">{errors.desiredBusiness.message}</p>}
         </div>
 
         <div className="grid grid-cols-3 gap-2">
@@ -182,35 +169,79 @@ function CompareResultView({ result }: { result: ComparisonResult }) {
   const { storeA, storeB, comparisonItems, summary, recommendation, analysisA, analysisB } = result
   const gcA = gradeColor(analysisA.overallGrade)
   const gcB = gradeColor(analysisB.overallGrade)
+  const addrA = storeA.address || storeA.name
+  const addrB = storeB.address || storeB.name
+  const aAdvCount = comparisonItems.filter(i => i.advantageFor === 'A').length
+  const bAdvCount = comparisonItems.filter(i => i.advantageFor === 'B').length
+  const winner = aAdvCount > bAdvCount ? 'A' : bAdvCount > aAdvCount ? 'B' : null
 
   return (
-    <div className="space-y-6 mt-8">
+    <div className="space-y-5 mt-8">
+      {/* AI Judgment — shown FIRST */}
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/60 flex items-center gap-2.5">
+          <Trophy className="w-4 h-4 text-amber-500" />
+          <h3 className="font-semibold text-slate-800 text-sm">종합 판단</h3>
+        </div>
+        <div className="p-6 space-y-4">
+          {/* Winner banner */}
+          {winner ? (
+            <div className={`rounded-xl p-4 border flex items-start gap-3 ${winner === 'A' ? 'bg-blue-50 border-blue-200' : 'bg-emerald-50 border-emerald-200'}`}>
+              <Trophy className={`w-5 h-5 mt-0.5 shrink-0 ${winner === 'A' ? 'text-blue-500' : 'text-emerald-500'}`} />
+              <div>
+                <p className={`text-sm font-bold mb-1 ${winner === 'A' ? 'text-blue-700' : 'text-emerald-700'}`}>
+                  후보 {winner} 우위 ({Math.max(aAdvCount, bAdvCount)}/{comparisonItems.length}개 항목)
+                </p>
+                <p className="text-xs text-slate-600 leading-relaxed">{recommendation}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl p-4 border bg-slate-50 border-slate-200 flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-slate-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-slate-600 leading-relaxed">{recommendation}</p>
+            </div>
+          )}
+
+          {/* Summary text */}
+          <div>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">비교 요약</p>
+            <p className="text-sm text-slate-700 leading-relaxed">{summary}</p>
+          </div>
+
+          {/* Advisory note */}
+          <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex items-start gap-2">
+            <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+            <p className="text-xs text-amber-800 leading-relaxed">
+              이 비교는 입력된 데이터 기준입니다. 보수적인 매출을 예상한다면 고정비 부담이 낮은 후보의 고객동선과 가시성을 현장에서 추가 확인한 후 비교하는 것이 적절합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Score comparison */}
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100">
-          <h3 className="font-semibold text-slate-800 text-sm flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-amber-500" />
-            종합 평가 비교
-          </h3>
+          <h3 className="font-semibold text-slate-800 text-sm">종합 평가 비교</h3>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-4">
             {[
-              { store: storeA, analysis: analysisA, gc: gcA, label: 'A' },
-              { store: storeB, analysis: analysisB, gc: gcB, label: 'B' },
-            ].map(({ store, analysis, gc, label }) => (
+              { store: storeA, analysis: analysisA, gc: gcA, label: 'A', addr: addrA, advCount: aAdvCount },
+              { store: storeB, analysis: analysisB, gc: gcB, label: 'B', addr: addrB, advCount: bAdvCount },
+            ].map(({ store, analysis, gc, label, addr, advCount }) => (
               <div key={store.id} className={`rounded-xl p-5 border ${gc.border} ${gc.bg}`}>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-2">
                   <div className={`w-5 h-5 ${label === 'A' ? 'bg-blue-600' : 'bg-emerald-600'} rounded-full flex items-center justify-center`}>
                     <span className="text-white text-[10px] font-black">{label}</span>
                   </div>
-                  <span className="font-semibold text-slate-800 text-sm">{store.name}</span>
+                  <span className="font-semibold text-slate-800 text-xs truncate">{addr}</span>
                 </div>
-                <div className="flex items-end gap-2 mb-2">
+                <div className="flex items-end gap-2 mb-1">
                   <span className={`text-4xl font-black ${gc.text}`}>{analysis.overallGrade}</span>
                   <span className={`text-lg font-bold ${gc.text} opacity-70 mb-1`}>{analysis.overallScore}점</span>
                 </div>
                 <p className="text-xs text-slate-600">{FLOOR_LABELS[store.floor]} · {store.areaPyeong}평 · 월세 {formatMoney(store.monthlyRent)}</p>
+                <p className="text-[10px] text-slate-400 mt-1">{advCount}개 항목 우위</p>
               </div>
             ))}
           </div>
@@ -220,23 +251,23 @@ function CompareResultView({ result }: { result: ComparisonResult }) {
       {/* Comparison table */}
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100">
-          <h3 className="font-semibold text-slate-800 text-sm">항목별 비교</h3>
+          <h3 className="font-semibold text-slate-800 text-sm">항목별 상세 비교</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-100">
-                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 w-32">항목</th>
-                <th className="text-center px-4 py-3 text-xs font-semibold text-blue-600 w-36">
-                  <div className="flex items-center justify-center gap-1.5">
+                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 w-28">항목</th>
+                <th className="text-center px-4 py-3 text-xs font-semibold text-blue-600 w-32">
+                  <div className="flex items-center justify-center gap-1">
                     <div className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
                       <span className="text-white text-[8px] font-black">A</span>
                     </div>
                     후보 A
                   </div>
                 </th>
-                <th className="text-center px-4 py-3 text-xs font-semibold text-emerald-600 w-36">
-                  <div className="flex items-center justify-center gap-1.5">
+                <th className="text-center px-4 py-3 text-xs font-semibold text-emerald-600 w-32">
+                  <div className="flex items-center justify-center gap-1">
                     <div className="w-4 h-4 bg-emerald-600 rounded-full flex items-center justify-center">
                       <span className="text-white text-[8px] font-black">B</span>
                     </div>
@@ -254,15 +285,11 @@ function CompareResultView({ result }: { result: ComparisonResult }) {
                   <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
                     <td className="px-5 py-3 text-xs font-semibold text-slate-600">{item.category}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`text-sm font-bold ${advA ? 'text-blue-700' : 'text-slate-600'}`}>
-                        {item.labelA}
-                      </span>
+                      <span className={`text-sm font-bold ${advA ? 'text-blue-700' : 'text-slate-600'}`}>{item.labelA}</span>
                       {advA && <Trophy className="w-3 h-3 text-amber-400 inline ml-1" />}
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`text-sm font-bold ${advB ? 'text-emerald-700' : 'text-slate-600'}`}>
-                        {item.labelB}
-                      </span>
+                      <span className={`text-sm font-bold ${advB ? 'text-emerald-700' : 'text-slate-600'}`}>{item.labelB}</span>
                       {advB && <Trophy className="w-3 h-3 text-amber-400 inline ml-1" />}
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-500 leading-relaxed">{item.interpretation}</td>
@@ -274,24 +301,8 @@ function CompareResultView({ result }: { result: ComparisonResult }) {
         </div>
       </div>
 
-      {/* Summary */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 space-y-4">
-        <h3 className="font-semibold text-slate-800 text-sm">비교 분석 해석</h3>
-        <p className="text-sm text-slate-700 leading-relaxed">{summary}</p>
-        <div className="border-t border-slate-100 pt-4">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">최종 의견</p>
-          <p className="text-sm text-slate-800 font-medium leading-relaxed">{recommendation}</p>
-        </div>
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-          <p className="text-xs text-amber-800 leading-relaxed">
-            <span className="font-semibold">주의:</span> 이 비교는 입력된 데이터 기준입니다. 보수적인 매출을 예상한다면
-            고정비 부담이 낮은 후보의 고객동선과 가시성을 현장에서 추가 확인한 후 비교하는 것이 적절합니다.
-          </p>
-        </div>
-      </div>
-
       <div className="flex gap-3">
-        <Link href="/analysis" className="btn-secondary text-sm px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold hover:bg-slate-50 transition-colors inline-flex items-center gap-2">
+        <Link href="/analysis" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors">
           새 분석하기
         </Link>
       </div>
@@ -314,7 +325,6 @@ export default function ComparePage() {
 
   function fillTest() {
     formA.reset({
-      name: '두정동 877 후보A',
       address: '천안시 서북구 두정동 877',
       desiredBusiness: '주점',
       floor: '1f',
@@ -331,7 +341,6 @@ export default function ComparePage() {
       premiumMan: 0,
     })
     formB.reset({
-      name: '불당동 123 후보B',
       address: '천안시 서북구 불당동 123',
       desiredBusiness: '주점',
       floor: '1f',
@@ -355,11 +364,8 @@ export default function ComparePage() {
     if (!validA || !validB) return
 
     setLoading(true)
-    const dataA = formA.getValues()
-    const dataB = formB.getValues()
-
-    const storeA = formToStore(dataA)
-    const storeB = formToStore(dataB)
+    const storeA = formToStore(formA.getValues())
+    const storeB = formToStore(formB.getValues())
     const analysisA = analyzeStore(storeA)
     const analysisB = analyzeStore(storeB)
     const comparison = compareStores(storeA, storeB, analysisA, analysisB)
@@ -373,13 +379,13 @@ export default function ComparePage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
           <GitCompare className="w-6 h-6 text-blue-600" />
           어느 점포가 이 업종에 더 적합할까요?
         </h1>
-        <p className="text-slate-500 text-sm">두 후보 점포를 동일한 기준으로 비교합니다. 각 점포 정보를 입력하세요.</p>
+        <p className="text-slate-500 text-sm">두 후보 점포를 동일한 기준으로 비교합니다. 주소와 조건을 입력하세요.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

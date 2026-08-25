@@ -13,8 +13,8 @@ import {
 } from 'lucide-react'
 
 const navItems = [
-  { href: '/analysis', label: '새 분석', icon: Plus, exact: true },
-  { href: '/analysis', label: '점포 분석', icon: MapPin, exact: false },
+  { href: '/store/new', label: '점포 입력 (폼)', icon: Plus, exact: true },
+  { href: '/analysis', label: '점포 분석 (채팅)', icon: MapPin, exact: false },
   { href: '/compare', label: '후보지 비교', icon: GitCompare, exact: false },
   { href: '/history', label: '분석 기록', icon: Clock, exact: false },
   { href: '/report', label: '고객 리포트', icon: FileText, exact: false },

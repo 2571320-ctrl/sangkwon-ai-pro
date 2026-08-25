@@ -43,19 +43,39 @@ export interface Store {
   previousBusiness: string
   floor: FloorType
   areaPyeong: number
+  areaSqm?: number
   frontageMeters: number
   isCorner: boolean
+  dualExposure?: boolean
   visibility: Visibility
+  signageVisibility?: string
+  entranceLocation?: string
+  customerFlow?: string
   parkingCount: number
   walkAccess: AccessLevel
   carAccess: AccessLevel
-  deposit: number       // 원 단위
-  monthlyRent: number   // 원 단위
-  maintenanceFee: number // 원 단위
-  premium: number        // 원 단위
+  pedestrianAccess?: AccessLevel
+  vehicleAccess?: AccessLevel
+  publicTransportAccess?: AccessLevel
+  elevator?: boolean
+  restroom?: boolean
+  duct?: boolean
+  cityGas?: boolean
+  electricCapacity?: string
+  drainage?: boolean
+  sewer?: boolean
+  fireSafety?: boolean
+  deposit: number
+  monthlyRent: number
+  maintenanceFee: number
+  premium: number
   vatIncluded: boolean
+  estimatedInteriorCost?: number
+  expectedMonthlySales?: number
+  contractPeriod?: string
   imageUrl: string
   memo: string
+  fieldMemo?: string
   createdAt: string
 }
 

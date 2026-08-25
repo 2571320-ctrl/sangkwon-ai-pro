@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { BarChart3, Plus, MessageSquare, Trash2, Settings, GitCompare, History, X } from 'lucide-react'
+import { BarChart3, Plus, MessageSquare, Trash2, Settings, GitCompare, History, X, FileInput } from 'lucide-react'
 import { getConversations, deleteConversation } from '@/lib/chat/storage'
 import { Conversation } from '@/lib/chat/types'
 
@@ -102,6 +102,13 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
 
       {/* Footer nav */}
       <div className="px-3 pb-4 border-t border-slate-200/60 pt-2 mt-2">
+        <Link
+          href="/store/new"
+          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-slate-600 hover:bg-white/70 transition-colors"
+        >
+          <FileInput className="w-4 h-4 text-slate-400" />
+          점포 입력 (폼)
+        </Link>
         <Link
           href="/compare"
           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-slate-600 hover:bg-white/70 transition-colors"
