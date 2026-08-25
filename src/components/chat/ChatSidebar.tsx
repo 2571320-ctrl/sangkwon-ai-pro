@@ -55,11 +55,18 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
         </div>
 
         <Link
+          href="/store/new"
+          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+        >
+          <FileInput className="w-4 h-4" />
+          새 점포 분석 시작
+        </Link>
+        <Link
           href="/chat"
-          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-[#0f172a] text-white text-sm font-medium hover:bg-slate-800 transition-colors"
+          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-[#0f172a] text-white text-sm font-medium hover:bg-slate-800 transition-colors mt-2"
         >
           <Plus className="w-4 h-4" />
-          새 채팅
+          AI에게 질문하기
         </Link>
       </div>
 

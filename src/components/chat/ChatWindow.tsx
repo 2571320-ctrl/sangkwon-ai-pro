@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BarChart3 } from 'lucide-react'
+import { BarChart3, ClipboardList, Plus } from 'lucide-react'
 import { Attachment, ChatMessage, CollectedData, Conversation } from '@/lib/chat/types'
 import { createNewConversation, processUserInput } from '@/lib/chat/engine'
 import { getConversation, saveConversation } from '@/lib/chat/storage'
@@ -304,30 +305,9 @@ export function ChatWindow({ conversationId }: Props) {
       return
     }
 
-    // "새 점포 분석 시작" → friendly guide only, no step-by-step wizard
+    // "새 점포 분석 시작" → 폼 페이지로 이동
     if (trimmed === '__start__') {
-      const userMsg: ChatMessage = {
-        id: generateId(),
-        role: 'user',
-        type: 'text',
-        text: '새 점포 분석 시작',
-        timestamp: new Date().toISOString(),
-      }
-      const guideMsg: ChatMessage = {
-        id: generateId(),
-        role: 'bot',
-        type: 'text',
-        text: '분석할 점포 정보를 편하게 말씀해주세요. 주소, 업종, 임대조건 등을 한 번에 입력하셔도 됩니다.\n\n예시: `두정동 929번지 1층 10평, 보증금 5000 월세 250, 무인 뽑기방`',
-        timestamp: new Date().toISOString(),
-      }
-      const updatedConv: Conversation = {
-        ...conv,
-        messages: [...conv.messages, userMsg, guideMsg],
-        updatedAt: new Date().toISOString(),
-      }
-      saveConversation(updatedConv)
-      setConv(updatedConv)
-      if (!conversationId) router.replace(`/chat/${updatedConv.id}`)
+      router.push('/store/new')
       setIsProcessing(false)
       return
     }
@@ -349,13 +329,12 @@ export function ChatWindow({ conversationId }: Props) {
 
   const hasUserMessages = conv.messages.some(m => m.role === 'user')
 
-  const QUICK_OPTIONS = [
-    { label: '새 점포 분석 시작', value: '__start__' },
+  const AI_QUICK_OPTIONS = [
     { label: '테스트 데이터로 바로 분석', value: '__test__' },
     { label: '후보지 A/B 비교', value: '/compare' },
   ]
 
-  // ── 웰컴 모드: 로고 + 제목 + 칩 + 입력창 중앙 집중 ────────────────────────
+  // ── 웰컴 모드: 두 흐름 분리 — 점포분석(폼) / AI 질문(채팅) ──────────────────
   if (!hasUserMessages) {
     return (
       <div className="flex flex-col items-center justify-center min-h-full px-6 py-12 bg-white">
@@ -364,23 +343,49 @@ export function ChatWindow({ conversationId }: Props) {
           <BarChart3 className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-bold text-slate-800 mb-2 tracking-tight">상권연구소 AI PRO</h1>
-        <p className="text-slate-500 text-base mb-1">무엇을 분석해드릴까요?</p>
-        <p className="text-slate-400 text-sm mb-8">점포명, 주소, 업종을 알려주시면 바로 시작합니다.</p>
+        <p className="text-slate-500 text-base mb-8">점포 계약 전 입지·상권·임대조건을 분석합니다</p>
 
-        {/* Quick chips + input in one block */}
-        <div className="w-full max-w-2xl">
-          <div className="flex flex-wrap gap-2 justify-center mb-3">
-            {QUICK_OPTIONS.map(opt => (
-              <button
-                key={opt.value}
-                onClick={() => handleInput(opt.value)}
-                className="px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
-              >
-                {opt.label}
-              </button>
-            ))}
+        <div className="w-full max-w-2xl space-y-5">
+          {/* 경로 1: 점포 분석 폼 */}
+          <div className="border border-slate-200 rounded-2xl p-5 hover:border-blue-200 hover:shadow-sm transition-all">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-[#0f172a] rounded-xl flex items-center justify-center shrink-0">
+                <ClipboardList className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-base font-semibold text-slate-800 mb-1">점포 분석 시작</h2>
+                <p className="text-sm text-slate-500 mb-3">주소·업종·임대조건을 입력하면 입지·가시성·업종적합도를 분석합니다</p>
+                <Link
+                  href="/store/new"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#0f172a] text-white text-sm font-medium rounded-full hover:bg-slate-800 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  새 점포 분석 시작
+                </Link>
+              </div>
+            </div>
           </div>
-          <InputBar onSubmit={handleInput} disabled={isProcessing} />
+
+          {/* 경로 2: AI 자유 질문 */}
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1 bg-slate-100" />
+              <span className="text-xs text-slate-400">또는 AI에게 직접 질문하기</span>
+              <div className="h-px flex-1 bg-slate-100" />
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center mb-3">
+              {AI_QUICK_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={() => handleInput(opt.value)}
+                  className="px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            <InputBar onSubmit={handleInput} disabled={isProcessing} />
+          </div>
         </div>
       </div>
     )
