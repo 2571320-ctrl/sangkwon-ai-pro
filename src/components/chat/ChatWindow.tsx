@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { BarChart3 } from 'lucide-react'
-import { Attachment, ChatMessage, Conversation } from '@/lib/chat/types'
+import { Attachment, ChatMessage, CollectedData, Conversation } from '@/lib/chat/types'
 import { createNewConversation, processUserInput } from '@/lib/chat/engine'
 import { getConversation, saveConversation } from '@/lib/chat/storage'
 import { analyzeStore } from '@/lib/analysis/engine'
@@ -50,7 +50,7 @@ export function ChatWindow({ conversationId }: Props) {
 
       const store: Store = {
         id: generateId(),
-        name: d.name ?? '점포',
+        name: d.name ?? d.address ?? '점포',
         address: d.address ?? '',
         desiredBusiness: d.desiredBusiness ?? '',
         currentBusiness: d.currentBusiness ?? '',
@@ -144,120 +144,176 @@ export function ChatWindow({ conversationId }: Props) {
     }
     setConv({ ...conv, messages: [...conv.messages, userMessage, loadingMsg] })
 
-    // Build OpenAI message history from the last 10 text messages
+    // Build conversation history (last 10 text messages)
     const history: { role: 'user' | 'assistant'; content: string }[] = conv.messages
       .filter(m => m.type === 'text')
       .slice(-10)
       .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }))
     history.push({ role: 'user', content: input })
 
-    let botMessage: ChatMessage
+    // Pass current collected context so OpenAI knows what's already been gathered
+    const currentContext = Object.fromEntries(
+      Object.entries(conv.collectedData).filter(([, v]) => v !== undefined && v !== null),
+    )
+
+    let reply = '죄송합니다. 잠시 후 다시 시도해주세요.'
+    let extractedContext: Partial<CollectedData> = {}
+    let readyForAnalysis = false
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history, currentContext }),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json() as { success: boolean; reply?: string }
-      botMessage = {
-        id: generateId(),
-        role: 'bot',
-        type: 'text',
-        text: data.success && data.reply ? data.reply : '죄송합니다. 잠시 후 다시 시도해주세요.',
-        timestamp: new Date().toISOString(),
-        ...(conv.step === 'welcome' ? {
-          options: [
-            { label: '새 점포 분석 시작', value: '__start__' },
-            { label: '테스트 데이터로 바로 분석', value: '__test__' },
-          ],
-        } : {}),
+      const data = await res.json() as {
+        success: boolean
+        reply?: string
+        extractedContext?: Partial<CollectedData>
+        readyForAnalysis?: boolean
+      }
+      if (data.success) {
+        reply = data.reply ?? reply
+        extractedContext = (data.extractedContext as Partial<CollectedData>) ?? {}
+        readyForAnalysis = data.readyForAnalysis ?? false
       }
     } catch {
-      botMessage = {
+      reply = '연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+    }
+
+    // Merge newly extracted fields into existing collected data
+    const mergedData: CollectedData = { ...conv.collectedData, ...extractedContext }
+
+    if (readyForAnalysis) {
+      // Ensure name is set before passing to Rule Engine calculator
+      const analysisData: CollectedData = {
+        ...mergedData,
+        name: mergedData.name ?? mergedData.address ?? '점포',
+      }
+      const botMessage: ChatMessage = {
         id: generateId(),
         role: 'bot',
         type: 'text',
-        text: '연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        text: reply,
         timestamp: new Date().toISOString(),
       }
-    }
-
-    const newTitle =
-      conv.title === '새 분석'
-        ? input.length > 20
-          ? input.slice(0, 20) + '…'
-          : input
+      const analyzeMsg: ChatMessage = {
+        id: generateId(),
+        role: 'bot',
+        type: 'loading',
+        text: '',
+        timestamp: new Date().toISOString(),
+      }
+      const preAnalysisConv: Conversation = {
+        ...conv,
+        step: 'analyzing',
+        messages: [...conv.messages, userMessage, botMessage, analyzeMsg],
+        collectedData: analysisData,
+        title: analysisData.name ?? conv.title,
+        updatedAt: new Date().toISOString(),
+      }
+      // Save without loading messages so localStorage stays clean
+      const toSave = {
+        ...preAnalysisConv,
+        messages: preAnalysisConv.messages.filter(m => m.type !== 'loading'),
+      }
+      saveConversation(toSave)
+      setConv(preAnalysisConv)
+      if (!conversationId) router.replace(`/chat/${preAnalysisConv.id}`)
+      await new Promise(r => setTimeout(r, 700))
+      await runAnalysis(preAnalysisConv)
+    } else {
+      const newTitle = mergedData.address
+        ? mergedData.address.slice(0, 20)
+        : conv.title === '새 분석'
+        ? input.length > 20 ? input.slice(0, 20) + '…' : input
         : conv.title
 
-    const updatedConv: Conversation = {
-      ...conv,
-      messages: [...conv.messages, userMessage, botMessage],
-      title: newTitle,
-      updatedAt: new Date().toISOString(),
-    }
-    saveConversation(updatedConv)
-    setConv(updatedConv)
-
-    if (!conversationId) {
-      router.replace(`/chat/${updatedConv.id}`)
+      const botMessage: ChatMessage = {
+        id: generateId(),
+        role: 'bot',
+        type: 'text',
+        text: reply,
+        timestamp: new Date().toISOString(),
+      }
+      const updatedConv: Conversation = {
+        ...conv,
+        messages: [...conv.messages, userMessage, botMessage],
+        collectedData: mergedData,
+        title: newTitle,
+        updatedAt: new Date().toISOString(),
+      }
+      saveConversation(updatedConv)
+      setConv(updatedConv)
+      if (!conversationId) router.replace(`/chat/${updatedConv.id}`)
     }
   }
 
   async function handleInput(input: string, attachments?: Attachment[]) {
     if (!conv || isProcessing) return
 
-    // Handle navigation shortcuts (only when no attachments)
-    if (input.startsWith('/') && !attachments?.length) {
-      router.push(input)
+    const trimmed = input.trim()
+
+    // Navigation shortcuts
+    if (trimmed.startsWith('/') && !attachments?.length) {
+      router.push(trimmed)
       return
     }
 
     setIsProcessing(true)
 
-    const trimmed = input.trim()
-    const isSpecialToken = trimmed === '__test__' || trimmed === '__start__'
-    // These steps collect structured data — rule engine must parse them
-    const ruleEngineSteps = ['ask-name-address', 'ask-business', 'ask-store-conditions', 'ask-rent', 'analyzing']
-    const useRuleEngine = isSpecialToken || ruleEngineSteps.includes(conv.step)
-
-    if (useRuleEngine) {
-      const { updatedConversation, analysisReady } = processUserInput(conv, input)
-
-      // Inject attachments into the newly added user message
-      let finalConv = updatedConversation
-      if (attachments && attachments.length > 0) {
-        const msgs = [...updatedConversation.messages]
-        const newUserIdx = conv.messages.length // index right after existing messages
-        if (msgs[newUserIdx]?.role === 'user') {
-          msgs[newUserIdx] = { ...msgs[newUserIdx], attachments }
-        }
-        finalConv = { ...updatedConversation, messages: msgs }
-      }
-
+    // Test data: direct Rule Engine (immediate analysis with preset data)
+    if (trimmed === '__test__') {
+      const { updatedConversation, analysisReady } = processUserInput(conv, trimmed)
       if (analysisReady) {
-        // Save without loading message (localStorage stays clean if interrupted)
         const toSave = {
-          ...finalConv,
-          messages: finalConv.messages.filter(m => m.type !== 'loading'),
+          ...updatedConversation,
+          messages: updatedConversation.messages.filter(m => m.type !== 'loading'),
         }
         saveConversation(toSave)
-        setConv(finalConv) // Show loading bubble in UI only
-        // Navigation happens inside runAnalysis AFTER saving the result
+        setConv(updatedConversation)
         await new Promise(r => setTimeout(r, 700))
-        await runAnalysis(finalConv)
+        await runAnalysis(updatedConversation)
       } else {
-        saveConversation(finalConv)
-        setConv(finalConv)
-        if (!conversationId) {
-          router.replace(`/chat/${finalConv.id}`)
-        }
+        saveConversation(updatedConversation)
+        setConv(updatedConversation)
+        if (!conversationId) router.replace(`/chat/${updatedConversation.id}`)
       }
-    } else {
-      // General conversation (welcome / results / post-analysis) → OpenAI
-      await handleWithOpenAI(input, attachments)
+      setIsProcessing(false)
+      return
     }
 
+    // "새 점포 분석 시작" → friendly guide only, no step-by-step wizard
+    if (trimmed === '__start__') {
+      const userMsg: ChatMessage = {
+        id: generateId(),
+        role: 'user',
+        type: 'text',
+        text: '새 점포 분석 시작',
+        timestamp: new Date().toISOString(),
+      }
+      const guideMsg: ChatMessage = {
+        id: generateId(),
+        role: 'bot',
+        type: 'text',
+        text: '분석할 점포 정보를 편하게 말씀해주세요. 주소, 업종, 임대조건 등을 한 번에 입력하셔도 됩니다.\n\n예시: `두정동 929번지 1층 10평, 보증금 5000 월세 250, 무인 뽑기방`',
+        timestamp: new Date().toISOString(),
+      }
+      const updatedConv: Conversation = {
+        ...conv,
+        messages: [...conv.messages, userMsg, guideMsg],
+        updatedAt: new Date().toISOString(),
+      }
+      saveConversation(updatedConv)
+      setConv(updatedConv)
+      if (!conversationId) router.replace(`/chat/${updatedConv.id}`)
+      setIsProcessing(false)
+      return
+    }
+
+    // All other input (including analysis data collection) → OpenAI
+    await handleWithOpenAI(input, attachments)
     setIsProcessing(false)
   }
 

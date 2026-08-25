@@ -209,7 +209,7 @@ export function InputBar({ onSubmit, disabled }: InputBarProps) {
         </div>
 
         <p className="text-center text-[10px] text-slate-400 mt-1.5">
-          상권연구소 AI PRO V0.1 · 규칙 기반 분석 엔진
+          상권연구소 AI PRO V0.1 · AI + 현장판단 엔진
         </p>
       </div>
     </div>
