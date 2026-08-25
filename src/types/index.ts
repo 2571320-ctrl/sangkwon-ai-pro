@@ -1,4 +1,15 @@
 export type Visibility = 'excellent' | 'good' | 'average' | 'poor'
+export type BusinessCategory = 'food' | 'bar' | 'unmanned' | 'cafe' | 'retail' | 'service' | 'general'
+
+export const BIZ_CATEGORY_LABELS: Record<BusinessCategory, string> = {
+  food: '음식점',
+  bar: '주점·술집',
+  unmanned: '무인점포',
+  cafe: '카페·음료',
+  retail: '소매·유통',
+  service: '서비스업',
+  general: '기타',
+}
 export type FloorType = 'basement' | '1f' | '2f' | '3f' | '4f_plus'
 export type Grade = 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D'
 export type CheckStatus = 'unchecked' | 'verified' | 'concern'
@@ -111,6 +122,27 @@ export interface MarketData {
   interpretation: string
 }
 
+export interface RentAnalysis {
+  monthlyRent: number
+  maintenanceFee: number
+  totalMonthly: number
+  expectedMonthlySales: number | null
+  rentRatioPct: number | null
+  referenceSalesAt10pct: number
+  referenceSalesAt12pct: number
+  interpretation: string
+  riskLevel: 'low' | 'caution' | 'high' | 'unknown'
+}
+
+export interface BizAnalysis {
+  category: BusinessCategory
+  categoryLabel: string
+  favorableFactors: string[]
+  unfavorableFactors: string[]
+  mustCheckFactors: string[]
+  specificRisks: string[]
+}
+
 export interface AnalysisResult {
   id: string
   storeId: string
@@ -130,6 +162,8 @@ export interface AnalysisResult {
   risks: AnalysisItem[]
   marketData: MarketData
   contractChecks: ContractCheck[]
+  rentAnalysis?: RentAnalysis
+  bizAnalysis?: BizAnalysis
   createdAt: string
 }
 
