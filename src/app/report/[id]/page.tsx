@@ -13,6 +13,7 @@ import {
   CheckCircle, XCircle, MinusCircle, GitCompare, Eye,
   MapPin, Car, Train, Footprints, Building2, ParkingCircle,
   Users, ShieldAlert, ClipboardCheck, BarChart3, FileWarning,
+  FileDown,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -244,6 +245,7 @@ export default function ReportPageComponent() {
   const router = useRouter()
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
   const [store, setStore] = useState<Store | null>(null)
+  const [pptLoading, setPptLoading] = useState(false)
 
   useEffect(() => {
     const id = params.id as string
@@ -260,6 +262,20 @@ export default function ReportPageComponent() {
         <div className="text-slate-400 text-sm">불러오는 중…</div>
       </div>
     )
+  }
+
+  const handlePptExport = async () => {
+    if (!analysis || !store) return
+    setPptLoading(true)
+    try {
+      const { generateReportPpt } = await import('@/lib/ppt/generateReport')
+      await generateReportPpt(analysis, store)
+    } catch (e) {
+      console.error('PPT 생성 오류:', e)
+      alert('PPT 생성 중 오류가 발생했습니다.')
+    } finally {
+      setPptLoading(false)
+    }
   }
 
   const gc = gradeColor(analysis.overallGrade)
@@ -369,13 +385,20 @@ export default function ReportPageComponent() {
               <Share2 className="w-4 h-4" />공유
             </button>
             <button
+              onClick={handlePptExport}
+              disabled={pptLoading}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1d4ed8] text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+              <FileDown className="w-4 h-4" />
+              {pptLoading ? 'PPT 생성 중…' : 'PPT 저장'}
+            </button>
+            <button
               onClick={() => window.print()}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0b1120] text-white text-sm font-semibold hover:bg-slate-800 transition-colors">
               <Printer className="w-4 h-4" />PDF / 인쇄
             </button>
           </div>
         </div>
-        <p className="mt-2 text-xs text-slate-400 text-center">아래 A4 페이지를 스크롤하거나 "PDF / 인쇄" 버튼으로 저장하세요</p>
+        <p className="mt-2 text-xs text-slate-400 text-center">아래 A4 페이지를 스크롤하거나 &ldquo;PDF / 인쇄&rdquo; 버튼으로 저장하세요</p>
       </div>
 
       {/* ══ REPORT PAGES ══ */}
