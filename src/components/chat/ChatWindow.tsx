@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BarChart3, ClipboardList, Plus } from 'lucide-react'
+import { BarChart3 } from 'lucide-react'
 import { Attachment, ChatMessage, CollectedData, Conversation } from '@/lib/chat/types'
 import { createNewConversation, processUserInput } from '@/lib/chat/engine'
 import { getConversation, saveConversation } from '@/lib/chat/storage'
@@ -16,6 +15,7 @@ import { detectUserIntent } from '@/lib/chat/intent'
 import { MessageBubble } from './MessageBubble'
 import { AnalysisCard } from './AnalysisCard'
 import { InputBar } from './InputBar'
+import { HomeScreen } from './HomeScreen'
 
 interface Props {
   conversationId?: string
@@ -381,62 +381,8 @@ export function ChatWindow({ conversationId }: Props) {
 
   const hasUserMessages = conv.messages.some(m => m.role === 'user')
 
-  const AI_QUICK_OPTIONS = [
-    { label: '테스트 데이터로 바로 분석', value: '__test__' },
-    { label: '후보지 A/B 비교', value: '/compare' },
-  ]
-
   if (!hasUserMessages) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-full px-6 py-12 bg-white">
-        <div className="w-16 h-16 bg-[#0f172a] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-          <BarChart3 className="w-8 h-8 text-white" />
-        </div>
-        <h1 className="text-3xl font-bold text-slate-800 mb-2 tracking-tight">상권연구소 AI PRO</h1>
-        <p className="text-slate-500 text-base mb-8">점포 계약 전 입지·상권·임대조건을 분석합니다</p>
-
-        <div className="w-full max-w-2xl space-y-5">
-          <div className="border border-slate-200 rounded-2xl p-5 hover:border-blue-200 hover:shadow-sm transition-all">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-[#0f172a] rounded-xl flex items-center justify-center shrink-0">
-                <ClipboardList className="w-5 h-5 text-white" />
-              </div>
-              <div className="flex-1">
-                <h2 className="text-base font-semibold text-slate-800 mb-1">점포 분석 시작</h2>
-                <p className="text-sm text-slate-500 mb-3">주소·업종·임대조건을 입력하면 입지·가시성·업종적합도를 분석합니다</p>
-                <Link
-                  href="/store/new"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#0f172a] text-white text-sm font-medium rounded-full hover:bg-slate-800 transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                  새 점포 분석 시작
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-px flex-1 bg-slate-100" />
-              <span className="text-xs text-slate-400">또는 AI에게 직접 질문하기</span>
-              <div className="h-px flex-1 bg-slate-100" />
-            </div>
-            <div className="flex flex-wrap gap-2 justify-center mb-3">
-              {AI_QUICK_OPTIONS.map(opt => (
-                <button
-                  key={opt.value}
-                  onClick={() => handleInput(opt.value)}
-                  className="px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            <InputBar onSubmit={handleInput} disabled={isProcessing} />
-          </div>
-        </div>
-      </div>
-    )
+    return <HomeScreen onSubmit={handleInput} disabled={isProcessing} />
   }
 
   return (
