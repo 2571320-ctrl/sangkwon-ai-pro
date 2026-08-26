@@ -215,9 +215,14 @@ export function ChatWindow({ conversationId }: Props) {
     setConv({ ...conv, messages: [...conv.messages, userMessage, loadingMsg] })
 
     const history: { role: 'user' | 'assistant'; content: string }[] = conv.messages
-      .filter(m => m.type === 'text')
-      .slice(-10)
-      .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }))
+      .filter(m => m.type === 'text' || m.type === 'analysis-card')
+      .slice(-12)
+      .map(m => ({
+        role: m.role === 'user' ? 'user' : 'assistant',
+        content: m.type === 'analysis-card'
+          ? `[분석 완료] ${m.text}`
+          : m.text,
+      }))
     history.push({ role: 'user', content: input })
 
     const currentContext = Object.fromEntries(
