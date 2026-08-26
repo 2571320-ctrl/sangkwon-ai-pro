@@ -12,6 +12,7 @@ import { persistStore, persistAnalysis } from '@/lib/supabase/repository'
 import { Store } from '@/types'
 import { generateId } from '@/lib/utils'
 import { getAnalysis, getStore } from '@/lib/storage'
+import { detectUserIntent } from '@/lib/chat/intent'
 import { MessageBubble } from './MessageBubble'
 import { AnalysisCard } from './AnalysisCard'
 import { InputBar } from './InputBar'
@@ -20,13 +21,61 @@ interface Props {
   conversationId?: string
 }
 
+// Build a Store object from conversation's collected data
+function buildStoreFromCollectedData(d: CollectedData): Store {
+  return {
+    id: generateId(),
+    name: d.address ?? d.name ?? '분석 점포',
+    address: d.address ?? d.name ?? '',
+    desiredBusiness: d.desiredBusiness ?? '',
+    currentBusiness: d.currentBusiness ?? '',
+    previousBusiness: d.previousBusiness ?? '',
+    floor: (d.floor as Store['floor']) ?? '1f',
+    areaPyeong: d.areaPyeong ?? 0,
+    areaSqm: d.areaSqm,
+    frontageMeters: d.frontageMeters ?? 0,
+    isCorner: d.isCorner ?? false,
+    dualExposure: d.dualExposure,
+    visibility: (d.visibility as Store['visibility']) ?? 'average',
+    signageVisibility: d.signageVisibility,
+    entranceLocation: d.entranceLocation,
+    customerFlow: d.customerFlow,
+    parkingCount: d.parkingCount ?? 0,
+    walkAccess: (d.pedestrianAccess as Store['walkAccess']) ?? (d.walkAccess as Store['walkAccess']) ?? 'average',
+    carAccess: (d.vehicleAccess as Store['carAccess']) ?? (d.carAccess as Store['carAccess']) ?? 'average',
+    pedestrianAccess: d.pedestrianAccess as Store['pedestrianAccess'],
+    vehicleAccess: d.vehicleAccess as Store['vehicleAccess'],
+    publicTransportAccess: d.publicTransportAccess as Store['publicTransportAccess'],
+    elevator: d.elevator,
+    restroom: d.restroom,
+    duct: d.duct,
+    cityGas: d.cityGas,
+    electricCapacity: d.electricCapacity,
+    drainage: d.drainage,
+    sewer: d.sewer,
+    fireSafety: d.fireSafety,
+    deposit: (d.depositMan ?? 0) * 10_000,
+    monthlyRent: (d.monthlyRentMan ?? 0) * 10_000,
+    maintenanceFee: (d.maintenanceFeeMan ?? 0) * 10_000,
+    premium: (d.premiumMan ?? 0) * 10_000,
+    vatIncluded: d.vatIncluded ?? false,
+    estimatedInteriorCost: (d.estimatedInteriorCostMan ?? 0) * 10_000,
+    // Only use expectedMonthlySales if user explicitly provided it; 0 means "not provided"
+    expectedMonthlySales: d.expectedMonthlySalesMan ? d.expectedMonthlySalesMan * 10_000 : 0,
+    contractPeriod: d.contractPeriod,
+    imageUrl: '',
+    memo: '',
+    fieldMemo: d.fieldMemo,
+    createdAt: new Date().toISOString(),
+  }
+}
+
 export function ChatWindow({ conversationId }: Props) {
   const [conv, setConv] = useState<Conversation | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
-  // Initialize conversation
   useEffect(() => {
     if (conversationId) {
       const saved = getConversation(conversationId)
@@ -40,78 +89,35 @@ export function ChatWindow({ conversationId }: Props) {
     }
   }, [conversationId, router])
 
-  // Auto-scroll to latest message
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [conv?.messages.length])
 
   const runAnalysis = useCallback(
     async (target: Conversation) => {
-      const d = target.collectedData
-
-      const store: Store = {
-        id: generateId(),
-        name: d.address ?? d.name ?? '점포',
-        address: d.address ?? d.name ?? '',
-        desiredBusiness: d.desiredBusiness ?? '',
-        currentBusiness: d.currentBusiness ?? '',
-        previousBusiness: d.previousBusiness ?? '',
-        floor: (d.floor as Store['floor']) ?? '1f',
-        areaPyeong: d.areaPyeong ?? 30,
-        areaSqm: d.areaSqm,
-        frontageMeters: d.frontageMeters ?? 5,
-        isCorner: d.isCorner ?? false,
-        dualExposure: d.dualExposure,
-        visibility: (d.visibility as Store['visibility']) ?? 'average',
-        signageVisibility: d.signageVisibility,
-        entranceLocation: d.entranceLocation,
-        customerFlow: d.customerFlow,
-        parkingCount: d.parkingCount ?? 0,
-        walkAccess: (d.pedestrianAccess as Store['walkAccess']) ?? (d.walkAccess as Store['walkAccess']) ?? 'average',
-        carAccess: (d.vehicleAccess as Store['carAccess']) ?? (d.carAccess as Store['carAccess']) ?? 'average',
-        pedestrianAccess: d.pedestrianAccess as Store['pedestrianAccess'],
-        vehicleAccess: d.vehicleAccess as Store['vehicleAccess'],
-        publicTransportAccess: d.publicTransportAccess as Store['publicTransportAccess'],
-        elevator: d.elevator,
-        restroom: d.restroom,
-        duct: d.duct,
-        cityGas: d.cityGas,
-        electricCapacity: d.electricCapacity,
-        drainage: d.drainage,
-        sewer: d.sewer,
-        fireSafety: d.fireSafety,
-        deposit: (d.depositMan ?? 0) * 10_000,
-        monthlyRent: (d.monthlyRentMan ?? 0) * 10_000,
-        maintenanceFee: (d.maintenanceFeeMan ?? 0) * 10_000,
-        premium: (d.premiumMan ?? 0) * 10_000,
-        vatIncluded: d.vatIncluded ?? false,
-        estimatedInteriorCost: (d.estimatedInteriorCostMan ?? 0) * 10_000,
-        expectedMonthlySales: (d.expectedMonthlySalesMan ?? 0) * 10_000,
-        contractPeriod: d.contractPeriod,
-        imageUrl: '',
-        memo: '',
-        fieldMemo: d.fieldMemo,
-        createdAt: new Date().toISOString(),
-      }
+      const store = buildStoreFromCollectedData({
+        ...target.collectedData,
+        name: target.collectedData.name ?? target.collectedData.address ?? '점포',
+      })
 
       const analysis = analyzeStore(store)
       await persistStore(store)
       await persistAnalysis(analysis)
 
-      const analysisCardMsg = {
+      const analysisCardMsg: ChatMessage = {
         id: generateId(),
-        role: 'bot' as const,
-        type: 'analysis-card' as const,
+        role: 'bot',
+        type: 'analysis-card',
         text: `**${store.name}** 분석이 완료되었습니다.`,
         timestamp: new Date().toISOString(),
         analysisId: analysis.id,
         storeId: store.id,
       }
 
-      const followUpMsg = {
+      const followUpMsg: ChatMessage = {
         id: generateId(),
-        role: 'bot' as const,
-        type: 'text' as const,
+        role: 'bot',
+        type: 'text',
         text: '더 궁금한 점이 있으시면 질문해주세요.',
         timestamp: new Date().toISOString(),
         options: [
@@ -136,7 +142,6 @@ export function ChatWindow({ conversationId }: Props) {
       saveConversation(updated)
       setConv(updated)
 
-      // Navigate to the conversation URL
       const targetId = conversationId ?? updated.id
       if (!conversationId) {
         router.replace(`/chat/${targetId}`)
@@ -144,6 +149,50 @@ export function ChatWindow({ conversationId }: Props) {
     },
     [conversationId, router],
   )
+
+  // REPORT_CREATE handler: build store/analysis from current context, navigate to report
+  async function handleReportCreate(currentConv: Conversation, userInput: string): Promise<void> {
+    const userMessage: ChatMessage = {
+      id: generateId(),
+      role: 'user',
+      type: 'text',
+      text: userInput,
+      timestamp: new Date().toISOString(),
+    }
+    const loadingMsg: ChatMessage = {
+      id: generateId(),
+      role: 'bot',
+      type: 'loading',
+      text: '',
+      timestamp: new Date().toISOString(),
+    }
+    setConv({ ...currentConv, messages: [...currentConv.messages, userMessage, loadingMsg] })
+
+    // Build store from whatever data we have collected so far
+    const store = buildStoreFromCollectedData(currentConv.collectedData)
+    const analysis = analyzeStore(store)
+    await persistStore(store)
+    await persistAnalysis(analysis)
+
+    const botMessage: ChatMessage = {
+      id: generateId(),
+      role: 'bot',
+      type: 'text',
+      text: '고객용 분석 리포트를 생성했습니다. 아래 버튼을 눌러 확인하세요.',
+      timestamp: new Date().toISOString(),
+      options: [{ label: '고객 리포트 보기', value: `/report/${analysis.id}` }],
+    }
+
+    const updatedConv: Conversation = {
+      ...currentConv,
+      messages: [...currentConv.messages, userMessage, botMessage],
+      analysisId: analysis.id,
+      updatedAt: new Date().toISOString(),
+    }
+    saveConversation(updatedConv)
+    setConv(updatedConv)
+    if (!conversationId) router.replace(`/chat/${updatedConv.id}`)
+  }
 
   async function handleWithOpenAI(input: string, attachments?: Attachment[]) {
     if (!conv) return
@@ -165,14 +214,12 @@ export function ChatWindow({ conversationId }: Props) {
     }
     setConv({ ...conv, messages: [...conv.messages, userMessage, loadingMsg] })
 
-    // Build conversation history (last 10 text messages)
     const history: { role: 'user' | 'assistant'; content: string }[] = conv.messages
       .filter(m => m.type === 'text')
       .slice(-10)
       .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }))
     history.push({ role: 'user', content: input })
 
-    // Pass current collected context so OpenAI knows what's already been gathered
     const currentContext = Object.fromEntries(
       Object.entries(conv.collectedData).filter(([, v]) => v !== undefined && v !== null),
     )
@@ -203,11 +250,9 @@ export function ChatWindow({ conversationId }: Props) {
       reply = '연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
     }
 
-    // Merge newly extracted fields into existing collected data
     const mergedData: CollectedData = { ...conv.collectedData, ...extractedContext }
 
     if (readyForAnalysis) {
-      // Ensure name is set before passing to Rule Engine calculator
       const analysisData: CollectedData = {
         ...mergedData,
         name: mergedData.name ?? mergedData.address ?? '점포',
@@ -234,7 +279,6 @@ export function ChatWindow({ conversationId }: Props) {
         title: analysisData.name ?? conv.title,
         updatedAt: new Date().toISOString(),
       }
-      // Save without loading messages so localStorage stays clean
       const toSave = {
         ...preAnalysisConv,
         messages: preAnalysisConv.messages.filter(m => m.type !== 'loading'),
@@ -276,7 +320,7 @@ export function ChatWindow({ conversationId }: Props) {
 
     const trimmed = input.trim()
 
-    // Navigation shortcuts
+    // Navigation shortcuts (e.g. /compare)
     if (trimmed.startsWith('/') && !attachments?.length) {
       router.push(trimmed)
       return
@@ -284,7 +328,7 @@ export function ChatWindow({ conversationId }: Props) {
 
     setIsProcessing(true)
 
-    // Test data: direct Rule Engine (immediate analysis with preset data)
+    // Test data shortcut
     if (trimmed === '__test__') {
       const { updatedConversation, analysisReady } = processUserInput(conv, trimmed)
       if (analysisReady) {
@@ -305,14 +349,22 @@ export function ChatWindow({ conversationId }: Props) {
       return
     }
 
-    // "새 점포 분석 시작" → 폼 페이지로 이동
+    // "새 점포 분석 시작" → form page
     if (trimmed === '__start__') {
       router.push('/store/new')
       setIsProcessing(false)
       return
     }
 
-    // All other input (including analysis data collection) → OpenAI
+    // ── Intent detection: REPORT_CREATE ──────────────────────────────────────
+    const { intent } = detectUserIntent(trimmed)
+    if (intent === 'REPORT_CREATE') {
+      await handleReportCreate(conv, input)
+      setIsProcessing(false)
+      return
+    }
+
+    // Default: send to OpenAI
     await handleWithOpenAI(input, attachments)
     setIsProcessing(false)
   }
@@ -334,11 +386,9 @@ export function ChatWindow({ conversationId }: Props) {
     { label: '후보지 A/B 비교', value: '/compare' },
   ]
 
-  // ── 웰컴 모드: 두 흐름 분리 — 점포분석(폼) / AI 질문(채팅) ──────────────────
   if (!hasUserMessages) {
     return (
       <div className="flex flex-col items-center justify-center min-h-full px-6 py-12 bg-white">
-        {/* Logo + heading */}
         <div className="w-16 h-16 bg-[#0f172a] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
           <BarChart3 className="w-8 h-8 text-white" />
         </div>
@@ -346,7 +396,6 @@ export function ChatWindow({ conversationId }: Props) {
         <p className="text-slate-500 text-base mb-8">점포 계약 전 입지·상권·임대조건을 분석합니다</p>
 
         <div className="w-full max-w-2xl space-y-5">
-          {/* 경로 1: 점포 분석 폼 */}
           <div className="border border-slate-200 rounded-2xl p-5 hover:border-blue-200 hover:shadow-sm transition-all">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-[#0f172a] rounded-xl flex items-center justify-center shrink-0">
@@ -366,7 +415,6 @@ export function ChatWindow({ conversationId }: Props) {
             </div>
           </div>
 
-          {/* 경로 2: AI 자유 질문 */}
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-slate-100" />
@@ -391,10 +439,8 @@ export function ChatWindow({ conversationId }: Props) {
     )
   }
 
-  // ── 채팅 모드: 메시지 자연 흐름 + sticky 입력창 ──────────────────────────
   return (
     <div className="relative bg-white">
-      {/* Messages area */}
       <div className="max-w-2xl mx-auto px-4 py-6 pb-28">
         {conv.messages.map(msg => {
           if (msg.type === 'analysis-card' && msg.analysisId && msg.storeId) {
@@ -425,7 +471,6 @@ export function ChatWindow({ conversationId }: Props) {
         <div ref={endRef} />
       </div>
 
-      {/* Sticky input bar */}
       <div className="sticky bottom-0 bg-white/95 backdrop-blur-sm border-t border-slate-100">
         <InputBar onSubmit={handleInput} disabled={isProcessing} />
       </div>

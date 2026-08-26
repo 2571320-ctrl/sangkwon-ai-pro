@@ -29,7 +29,6 @@ export function MessageBubble({ message, onOptionClick }: Props) {
     return (
       <div className="flex justify-end py-2.5">
         <div className="max-w-[72%] flex flex-col items-end gap-2">
-          {/* Attachments */}
           {atts.length > 0 && (
             <div className="flex flex-wrap gap-2 justify-end">
               {atts.map(att =>
@@ -51,7 +50,6 @@ export function MessageBubble({ message, onOptionClick }: Props) {
               )}
             </div>
           )}
-          {/* Text bubble (hidden for attachment-only messages) */}
           {message.text && message.text !== '[파일 첨부]' && (
             <div className="bg-slate-100 px-4 py-3 rounded-2xl rounded-tr-md">
               <p className="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">{message.text}</p>
@@ -66,9 +64,9 @@ export function MessageBubble({ message, onOptionClick }: Props) {
     <div className="flex gap-3 py-2.5">
       <BotAvatar />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
-          {renderText(message.text)}
-        </p>
+        <div className="text-sm text-slate-800 leading-relaxed">
+          <MarkdownRenderer text={message.text} />
+        </div>
         {message.options && message.options.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
             {message.options.map(opt => (
@@ -95,7 +93,8 @@ function BotAvatar() {
   )
 }
 
-function renderText(text: string): React.ReactNode {
+// Inline formatting: **bold**, `code`
+function renderInline(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/)
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
@@ -110,4 +109,101 @@ function renderText(text: string): React.ReactNode {
     }
     return part
   })
+}
+
+function MarkdownRenderer({ text }: { text: string }) {
+  const lines = text.split('\n')
+  const elements: React.ReactNode[] = []
+  let listItems: React.ReactNode[] = []
+  let listType: 'ul' | 'ol' | null = null
+
+  function flushList() {
+    if (listItems.length === 0) return
+    if (listType === 'ul') {
+      elements.push(
+        <ul key={elements.length} className="list-disc list-inside space-y-0.5 my-1.5 pl-1">
+          {listItems}
+        </ul>
+      )
+    } else {
+      elements.push(
+        <ol key={elements.length} className="list-decimal list-inside space-y-0.5 my-1.5 pl-1">
+          {listItems}
+        </ol>
+      )
+    }
+    listItems = []
+    listType = null
+  }
+
+  lines.forEach((line, i) => {
+    // H3
+    if (/^###\s+/.test(line)) {
+      flushList()
+      elements.push(
+        <p key={i} className="font-bold text-slate-900 mt-3 mb-1 text-base">
+          {renderInline(line.replace(/^###\s+/, ''))}
+        </p>
+      )
+      return
+    }
+    // H4
+    if (/^####\s+/.test(line)) {
+      flushList()
+      elements.push(
+        <p key={i} className="font-semibold text-slate-800 mt-2 mb-0.5">
+          {renderInline(line.replace(/^####\s+/, ''))}
+        </p>
+      )
+      return
+    }
+    // H2
+    if (/^##\s+/.test(line)) {
+      flushList()
+      elements.push(
+        <p key={i} className="font-bold text-slate-900 mt-3 mb-1 text-lg">
+          {renderInline(line.replace(/^##\s+/, ''))}
+        </p>
+      )
+      return
+    }
+    // Bullet list
+    if (/^[-*]\s+/.test(line)) {
+      if (listType !== 'ul') { flushList(); listType = 'ul' }
+      listItems.push(
+        <li key={i} className="text-slate-700">{renderInline(line.replace(/^[-*]\s+/, ''))}</li>
+      )
+      return
+    }
+    // Numbered list
+    if (/^\d+\.\s+/.test(line)) {
+      if (listType !== 'ol') { flushList(); listType = 'ol' }
+      listItems.push(
+        <li key={i} className="text-slate-700">{renderInline(line.replace(/^\d+\.\s+/, ''))}</li>
+      )
+      return
+    }
+    // Horizontal rule
+    if (/^---+$/.test(line.trim())) {
+      flushList()
+      elements.push(<hr key={i} className="border-slate-200 my-2" />)
+      return
+    }
+    // Empty line
+    if (line.trim() === '') {
+      flushList()
+      elements.push(<div key={i} className="h-1.5" />)
+      return
+    }
+    // Regular paragraph
+    flushList()
+    elements.push(
+      <p key={i} className="leading-relaxed">
+        {renderInline(line)}
+      </p>
+    )
+  })
+
+  flushList()
+  return <>{elements}</>
 }
