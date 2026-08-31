@@ -14,6 +14,8 @@ export function MobileLayout({ children }: { children: React.ReactNode }) {
     setSidebarOpen(false)
   }, [pathname])
 
+  if (pathname === '/') return <>{children}</>
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* 모바일 배경 오버레이 */}
