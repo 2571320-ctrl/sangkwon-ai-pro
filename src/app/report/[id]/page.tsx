@@ -79,7 +79,7 @@ function ReportPage({ children, pageNum, totalPages, noPadding, darkBg }: {
   darkBg?: boolean
 }) {
   return (
-    <div className={`report-page relative ${darkBg ? 'bg-[#0b1120]' : 'bg-[#FDFCFA]'} overflow-hidden`}>
+    <div className={`report-page relative ${darkBg ? 'bg-[#071C14]' : 'bg-[#FDFCFA]'} overflow-hidden`}>
       {!noPadding
         ? <div className="px-12 py-10">{children}</div>
         : children
@@ -458,18 +458,20 @@ export default function ReportPageComponent() {
             PAGE 1 — 표지 + Executive Summary
             ═══════════════════════════════ */}
         <ReportPage pageNum={1} totalPages={TOTAL} noPadding darkBg>
-          {/* Cover section — redesigned */}
-          <div style={{ background: '#080D18', position: 'relative', overflow: 'hidden' }}>
+          {/* Cover section — deep forest green premium */}
+          <div style={{ background: 'linear-gradient(145deg, #071C14 0%, #0A2018 60%, #0C2416 100%)', position: 'relative', overflow: 'hidden' }}>
 
-            {/* Decorative geometric rings (top-right) */}
-            <div style={{ position: 'absolute', top: -80, right: -60, width: 340, height: 340, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.12)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', top: -30, right: -10, width: 240, height: 240, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.07)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', top: 20, right: 40, width: 130, height: 130, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.06)', pointerEvents: 'none' }} />
-            {/* Subtle diagonal grid */}
-            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
+            {/* Decorative rings — terracotta tinted, more visible */}
+            <div style={{ position: 'absolute', top: -90, right: -70, width: 380, height: 380, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.22)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: -30, right: -10, width: 260, height: 260, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.13)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: 30, right: 50, width: 140, height: 140, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.08)', pointerEvents: 'none' }} />
+            {/* Green-tinted subtle grid */}
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(100,200,140,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(100,200,140,0.025) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
+            {/* Bottom-left ambient glow */}
+            <div style={{ position: 'absolute', bottom: -60, left: -40, width: 280, height: 280, borderRadius: '50%', background: 'radial-gradient(circle, rgba(194,74,44,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
             {/* Top accent bar */}
-            <div style={{ height: 3, background: 'linear-gradient(90deg, #C24A2C 0%, #E07050 55%, transparent 100%)' }} />
+            <div style={{ height: 3, background: 'linear-gradient(90deg, #C24A2C 0%, #E07050 50%, rgba(194,74,44,0.3) 80%, transparent 100%)' }} />
 
             {/* Main content area */}
             <div style={{ padding: '36px 48px 0', position: 'relative', zIndex: 1 }}>
@@ -487,19 +489,20 @@ export default function ReportPageComponent() {
 
                 {/* Left: title block */}
                 <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 18, fontWeight: 500 }}>
+                  <p style={{ fontSize: 10, color: 'rgba(180,220,200,0.55)', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 18, fontWeight: 500 }}>
                     Commercial Location Intelligence
                   </p>
                   <h1 style={{
                     fontFamily: "'Noto Serif KR', serif",
-                    fontSize: '2.35rem', fontWeight: 900, color: 'white',
+                    fontSize: '2.35rem', fontWeight: 900, color: '#F0EDE8',
                     lineHeight: 1.2, letterSpacing: '-0.01em', margin: '0 0 20px',
+                    textShadow: '0 2px 12px rgba(0,0,0,0.3)',
                   }}>
                     점포 · 입지<br />분석 리포트
                   </h1>
                   <div style={{ width: 40, height: 2, background: 'linear-gradient(90deg, #C24A2C, #E07050)', marginBottom: 22 }} />
-                  <p style={{ fontSize: 14, color: '#B8AFA6', fontWeight: 600, marginBottom: 6, lineHeight: 1.4 }}>{displayName}</p>
-                  <p style={{ fontSize: 11, color: '#5A5148', letterSpacing: '0.06em', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 14, color: '#C8D8C4', fontWeight: 600, marginBottom: 6, lineHeight: 1.4 }}>{displayName}</p>
+                  <p style={{ fontSize: 11, color: 'rgba(180,210,190,0.6)', letterSpacing: '0.06em', lineHeight: 1.6 }}>
                     {store.desiredBusiness} &nbsp;·&nbsp; {FLOOR_LABELS[store.floor]} &nbsp;·&nbsp; {store.areaPyeong}평
                   </p>
                 </div>
@@ -510,46 +513,47 @@ export default function ReportPageComponent() {
                     width: 120, height: 120,
                     border: `2px solid ${gh.border}`,
                     borderRadius: 20,
-                    background: gh.glow,
+                    background: `linear-gradient(135deg, ${gh.glow} 0%, rgba(7,28,20,0.8) 100%)`,
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: `0 0 40px ${gh.glow}, 0 0 80px ${gh.glow.replace('0.18', '0.08')}`,
-                    backdropFilter: 'blur(6px)',
+                    boxShadow: `0 0 48px ${gh.glow}, 0 0 90px ${gh.glow.replace('0.18', '0.06')}, inset 0 1px 0 rgba(255,255,255,0.08)`,
+                    backdropFilter: 'blur(8px)',
                     marginBottom: 8,
                   }}>
                     <span style={{
                       fontFamily: "'Noto Serif KR', serif",
                       fontSize: '3rem', fontWeight: 900, color: gh.text, lineHeight: 1,
+                      textShadow: `0 0 20px ${gh.glow}`,
                     }}>
                       {analysis.overallGrade}
                     </span>
-                    <div style={{ width: 32, height: 1, background: `${gh.border}`, margin: '6px 0' }} />
-                    <span style={{ fontSize: 12, fontWeight: 700, color: gh.text, opacity: 0.65 }}>{analysis.overallScore}점</span>
+                    <div style={{ width: 32, height: 1, background: gh.border, margin: '6px 0' }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: gh.text, opacity: 0.75 }}>{analysis.overallScore}점</span>
                   </div>
-                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.18em', textAlign: 'center' }}>종합 등급</p>
+                  <p style={{ fontSize: 9, color: 'rgba(180,210,190,0.5)', textTransform: 'uppercase', letterSpacing: '0.18em', textAlign: 'center' }}>종합 등급</p>
                 </div>
               </div>
 
               {/* Meta row (date + recommendation) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 28, marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.055)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 28, marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                 <div>
-                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>분석일</p>
-                  <p style={{ fontSize: 13, color: '#B8AFA6', fontWeight: 600 }}>{createdDate}</p>
+                  <p style={{ fontSize: 9, color: 'rgba(180,210,190,0.5)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>분석일</p>
+                  <p style={{ fontSize: 13, color: '#C8D8C4', fontWeight: 600 }}>{createdDate}</p>
                 </div>
-                <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.07)' }} />
+                <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.1)' }} />
                 <div>
-                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>종합 판정</p>
+                  <p style={{ fontSize: 9, color: 'rgba(180,210,190,0.5)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>종합 판정</p>
                   <div style={{
                     display: 'inline-flex', alignItems: 'center', padding: '5px 14px',
                     border: `1px solid ${rh.border}`, borderRadius: 100,
-                    background: `${rh.border.replace('0.35', '0.08')}`,
+                    background: `${rh.border.replace('0.35', '0.12')}`,
                   }}>
                     <span style={{ fontSize: 11, fontWeight: 800, color: rh.text, letterSpacing: '0.04em' }}>{rh.label}</span>
                   </div>
                 </div>
-                <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.07)' }} />
+                <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.1)' }} />
                 <div>
-                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>리포트 구성</p>
-                  <p style={{ fontSize: 13, color: '#B8AFA6', fontWeight: 600 }}>9페이지</p>
+                  <p style={{ fontSize: 9, color: 'rgba(180,210,190,0.5)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>리포트 구성</p>
+                  <p style={{ fontSize: 13, color: '#C8D8C4', fontWeight: 600 }}>9페이지</p>
                 </div>
               </div>
             </div>
@@ -557,22 +561,23 @@ export default function ReportPageComponent() {
             {/* Key metrics bar */}
             <div style={{
               display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-              borderTop: '1px solid rgba(255,255,255,0.055)',
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              background: 'rgba(0,0,0,0.18)',
               marginTop: 28, position: 'relative', zIndex: 1,
             }}>
               {coverMetrics.map((m, i) => (
                 <div key={i} style={{
                   padding: '18px 24px',
-                  borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.055)' : 'none',
-                  background: m.alert ? 'rgba(194,74,44,0.06)' : 'transparent',
+                  borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+                  background: m.alert ? 'rgba(194,74,44,0.10)' : 'transparent',
                 }}>
-                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>{m.label}</p>
+                  <p style={{ fontSize: 9, color: 'rgba(180,210,190,0.5)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>{m.label}</p>
                   <p style={{
                     fontSize: '1.4rem', fontWeight: 900, lineHeight: 1,
-                    color: m.alert ? '#E07050' : '#C8BFB2',
+                    color: m.alert ? '#E07050' : '#D4E4D0',
                     fontFamily: "'Noto Serif KR', serif", marginBottom: 6,
                   }}>{m.value}</p>
-                  <p style={{ fontSize: 9, color: m.alert ? '#7A3520' : '#3D3530' }}>{m.sub}</p>
+                  <p style={{ fontSize: 9, color: m.alert ? '#E07050' : 'rgba(180,210,190,0.4)' }}>{m.sub}</p>
                   {m.alert && (
                     <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
                       <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#E07050', flexShrink: 0 }} />
