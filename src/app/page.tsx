@@ -71,8 +71,6 @@ export default function LandingPage() {
   return (
     <div style={{ ...TOKENS, fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif', color: 'var(--ink)', background: 'var(--white)', overflowX: 'hidden' } as React.CSSProperties}>
       <style>{`
-        html, body { overflow-x: hidden; max-width: 100%; }
-        *, *::before, *::after { box-sizing: border-box; }
         @keyframes ticker-slide {
           from { transform: translateX(0); }
           to   { transform: translateX(-50%); }
@@ -114,47 +112,6 @@ export default function LandingPage() {
         .vs-check { color: #27AE60; font-weight: 700; }
         .vs-cross { color: #BDC3C7; }
         .vs-half  { color: #E67E22; }
-        /* Nav links: desktop only */
-        .l-nav-links { display: none; }
-        @media (min-width: 768px) {
-          .l-nav-links { display: flex !important; }
-        }
-        /* Nav login button: desktop only */
-        .l-nav-login { display: none; }
-        @media (min-width: 768px) {
-          .l-nav-login { display: inline-flex !important; }
-        }
-        /* Sticky CTA bar: mobile only */
-        .l-mobile-cta { display: block; }
-        @media (min-width: 768px) {
-          .l-mobile-cta { display: none !important; }
-        }
-        /* Responsive overrides */
-        @media (max-width: 820px) {
-          .l-hero-grid    { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .l-hero-visual  { display: none !important; }
-          .l-process-main { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .l-process-grid { grid-template-columns: 1fr 1fr !important; }
-          .l-pricing-grid { grid-template-columns: 1fr !important; }
-          .l-founder-grid { grid-template-columns: 1fr !important; text-align: center; }
-          .l-founder-photo { margin: 0 auto !important; }
-          .l-footer-inner { flex-direction: column !important; gap: 20px !important; }
-        }
-        @media (max-width: 640px) {
-          .l-process-grid  { grid-template-columns: 1fr !important; }
-          .l-hero-cta      { flex-direction: column !important; align-items: stretch !important; }
-          .l-btn-primary   { width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
-          .l-btn-secondary { width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
-          .l-pricing-grid  { gap: 12px !important; }
-        }
-        /* Mobile bottom padding for sticky bars */
-        @media (max-width: 767px) {
-          .l-page-bottom { padding-bottom: 80px; }
-        }
-        /* Nav CTA button compact on very narrow screens */
-        @media (max-width: 400px) {
-          .l-nav-cta { font-size: 12px !important; padding: 6px 10px !important; }
-        }
       `}</style>
 
       {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
