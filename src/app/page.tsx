@@ -279,8 +279,8 @@ export default function LandingPage() {
       {/* ══ FOUNDER ══════════════════════════════════════════════════════════ */}
       <section style={{ background: 'white', padding: '80px 24px' }}>
         <div className="l-founder-grid" style={{ maxWidth: 820, margin: '0 auto', display: 'grid', gridTemplateColumns: '180px 1fr', gap: 48, alignItems: 'center' }}>
-          <div className="l-founder-photo" style={{ width: 160, height: 160, borderRadius: '50%', background: 'var(--gray)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 52, margin: 0 }}>
-            🏢
+          <div className="l-founder-photo" style={{ width: 180, height: 180, borderRadius: 16, overflow: 'hidden', flexShrink: 0, margin: 0, boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+            <img src="/contract.png" alt="부동산 임대차 계약서" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
           </div>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 16, textTransform: 'uppercase' }}>왜 만들었나요</div>
