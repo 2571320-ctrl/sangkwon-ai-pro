@@ -60,9 +60,9 @@ function DataRow({ label, value, mono, highlight }: {
   label: string; value: string; mono?: boolean; highlight?: boolean
 }) {
   return (
-    <div className="flex items-start py-2 border-b border-slate-100 last:border-0 gap-3">
-      <dt className="w-36 shrink-0 text-[11px] font-semibold text-slate-400">{label}</dt>
-      <dd className={`text-[12px] flex-1 leading-snug ${highlight ? 'font-bold text-[#0b1120]' : 'font-medium text-slate-700'} ${mono ? 'font-mono' : ''}`}>
+    <div className="flex items-start py-2.5 border-b border-[#EDE9E3] last:border-0 gap-3">
+      <dt className="w-36 shrink-0 text-[11px] font-medium text-[#8A8078]" style={{ fontFamily: 'Pretendard, sans-serif' }}>{label}</dt>
+      <dd className={`text-[12px] flex-1 leading-snug tracking-tight ${highlight ? 'font-bold text-[#0A0A0A]' : 'font-medium text-[#3D3730]'} ${mono ? 'font-mono' : ''}`}>
         {value}
       </dd>
     </div>
@@ -79,13 +79,13 @@ function ReportPage({ children, pageNum, totalPages, noPadding, darkBg }: {
   darkBg?: boolean
 }) {
   return (
-    <div className={`report-page relative ${darkBg ? 'bg-[#0b1120]' : 'bg-white'} overflow-hidden`}>
+    <div className={`report-page relative ${darkBg ? 'bg-[#0b1120]' : 'bg-[#FDFCFA]'} overflow-hidden`}>
       {!noPadding
         ? <div className="px-12 py-10">{children}</div>
         : children
       }
       {/* Page number — screen only */}
-      <div className="absolute bottom-5 right-8 text-[10px] text-slate-300 font-medium report-pagenum">
+      <div className="absolute bottom-5 right-8 text-[9px] text-[#B8AFA6] font-semibold tracking-widest report-pagenum">
         {pageNum} / {totalPages}
       </div>
     </div>
@@ -96,9 +96,13 @@ function ReportPage({ children, pageNum, totalPages, noPadding, darkBg }: {
 
 function PageSection({ label, icon }: { label: string; icon?: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-2 mb-4 pb-2 border-b-2 border-[#0b1120]">
-      {icon && <span className="text-[#0b1120]">{icon}</span>}
-      <h2 className="text-sm font-black text-[#0b1120] uppercase tracking-wide">{label}</h2>
+    <div className="mb-6">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="w-1 h-4 rounded-full bg-[#C24A2C] shrink-0" />
+        {icon && <span className="text-[#C24A2C] opacity-70">{icon}</span>}
+        <h2 className="text-[13px] font-black text-[#0A0A0A] tracking-[0.08em] uppercase" style={{ fontFamily: "'Noto Serif KR', 'Pretendard', serif" }}>{label}</h2>
+      </div>
+      <div className="h-px bg-[#E8E3DC]" />
     </div>
   )
 }
@@ -330,19 +334,21 @@ export default function ReportPageComponent() {
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap');
         .report-page {
           width: 210mm;
           min-height: 297mm;
-          box-shadow: 0 4px 28px rgba(0,0,0,0.13);
-          margin: 0 auto 2.5rem;
+          box-shadow: 0 8px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+          margin: 0 auto 3rem;
           break-after: page;
           page-break-after: always;
           display: flex;
           flex-direction: column;
+          font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         .report-wrapper {
-          background: #e8eaef;
-          padding: 2.5rem 1rem;
+          background: linear-gradient(160deg, #EDE9E3 0%, #E4DED6 100%);
+          padding: 3rem 1rem;
         }
         @media (max-width: 768px) {
           .report-page { width: 100%; min-height: auto; }
@@ -409,70 +415,75 @@ export default function ReportPageComponent() {
             ═══════════════════════════════ */}
         <ReportPage pageNum={1} totalPages={TOTAL} noPadding darkBg>
           {/* Cover section */}
-          <div className="bg-[#0b1120] px-12 pt-12 pb-8 flex flex-col justify-between" style={{ minHeight: '45%' }}>
+          <div className="bg-[#0b1120] px-12 pt-14 pb-10 flex flex-col justify-between" style={{ minHeight: '48%' }}>
+            {/* Brand line */}
             <div>
-              <p className="text-[10px] font-black text-[#D4846A] uppercase tracking-widest mb-8">
-                상권연구소 AI PRO · Store Location Analysis Report
-              </p>
-              <h1 className="text-3xl font-black text-white mb-2 leading-tight">
-                점포 · 입지 분석 리포트
+              <div className="flex items-center gap-3 mb-10">
+                <div className="w-6 h-[1px] bg-[#C24A2C]" />
+                <p className="text-[9px] font-bold text-[#C24A2C] uppercase tracking-[0.3em]">
+                  상권연구소 AI PRO · Store Location Analysis
+                </p>
+              </div>
+              <h1 className="text-[2.1rem] font-black text-white leading-[1.2] mb-3" style={{ fontFamily: "'Noto Serif KR', serif", letterSpacing: '-0.01em' }}>
+                점포 · 입지<br />분석 리포트
               </h1>
-              <p className="text-slate-400 text-base mt-2">{displayName}</p>
-              <p className="text-slate-500 text-sm mt-1">
+              <div className="w-12 h-[2px] bg-[#C24A2C] my-5" />
+              <p className="text-[#A89B8A] text-sm font-medium leading-relaxed">{displayName}</p>
+              <p className="text-[#6B6057] text-[11px] mt-1.5 tracking-wide">
                 {store.desiredBusiness} · {FLOOR_LABELS[store.floor]} · {store.areaPyeong}평
               </p>
             </div>
-            <div className="flex items-end justify-between mt-8">
+            <div className="flex items-end justify-between mt-10">
               <div className="space-y-1">
-                <p className="text-slate-500 text-[10px]">분석일</p>
-                <p className="text-white text-sm font-semibold">{createdDate}</p>
-                <div className={`mt-2 inline-flex items-center px-3 py-1 rounded-full border ${rc.border} ${rc.bg}`}>
-                  <span className={`text-xs font-bold ${rc.text}`}>{RECOMMENDATION_LABELS[analysis.recommendation]}</span>
+                <p className="text-[#5A5148] text-[9px] uppercase tracking-widest">분석일</p>
+                <p className="text-[#C8BFB2] text-sm font-semibold">{createdDate}</p>
+                <div className={`mt-3 inline-flex items-center px-3.5 py-1.5 rounded-full border ${rc.border} ${rc.bg}`}>
+                  <span className={`text-[11px] font-bold ${rc.text}`}>{RECOMMENDATION_LABELS[analysis.recommendation]}</span>
                 </div>
               </div>
               <div className="text-right">
-                <div className={`w-24 h-24 rounded-2xl border-2 ${gc.border} ${gc.bg} flex flex-col items-center justify-center`}>
-                  <span className={`text-4xl font-black ${gc.text} leading-none`}>{analysis.overallGrade}</span>
-                  <span className={`text-xs font-bold ${gc.text} opacity-70 mt-1`}>{analysis.overallScore}점</span>
+                <div className={`w-28 h-28 rounded-3xl border-2 ${gc.border} ${gc.bg} flex flex-col items-center justify-center shadow-lg`}>
+                  <span className={`text-[2.8rem] font-black ${gc.text} leading-none`} style={{ fontFamily: "'Noto Serif KR', serif" }}>{analysis.overallGrade}</span>
+                  <span className={`text-[11px] font-bold ${gc.text} opacity-60 mt-1`}>{analysis.overallScore}점</span>
                 </div>
-                <p className="text-slate-500 text-[10px] mt-1">종합 등급</p>
+                <p className="text-[#5A5148] text-[9px] mt-2 uppercase tracking-widest">종합 등급</p>
               </div>
             </div>
           </div>
 
           {/* Executive Summary */}
-          <div className="bg-white px-12 py-8 flex-1">
+          <div className="bg-[#FDFCFA] px-12 py-10 flex-1">
             <PageSection label="Executive Summary — 핵심 요약" icon={<BarChart3 className="w-4 h-4" />} />
 
-            <div className={`rounded-xl p-4 border-l-4 ${rc.border} bg-slate-50 mb-5`}>
-              <p className={`text-xs font-bold mb-1 ${rc.text}`}>{RECOMMENDATION_LABELS[analysis.recommendation]}</p>
-              <p className="text-sm text-slate-700 leading-relaxed">{analysis.summary}</p>
+            <div className={`rounded-2xl p-5 border-l-[3px] ${rc.border} bg-[#FAFAF8] mb-6`}>
+              <p className={`text-[11px] font-black mb-2 uppercase tracking-widest ${rc.text}`}>{RECOMMENDATION_LABELS[analysis.recommendation]}</p>
+              <p className="text-[13px] text-[#3D3730] leading-[1.75]">{analysis.summary}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-5 mb-5">
+            <div className="grid grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-[10px] font-black text-emerald-600 uppercase tracking-wider mb-2">핵심 강점</p>
-                <ul className="space-y-2">
+                <p className="text-[9px] font-black text-emerald-700 uppercase tracking-[0.2em] mb-3">핵심 강점</p>
+                <ul className="space-y-3">
                   {analysis.strengths.slice(0, 4).map((s, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <TrendingUp className="w-3 h-3 text-emerald-500 mt-0.5 shrink-0" />
+                    <li key={i} className="flex items-start gap-2.5">
+                      <TrendingUp className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
                       <div>
-                        <span className="text-[11px] font-semibold text-slate-800">{s.title}</span>
-                        <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">{s.interpretation.slice(0, 65)}…</p>
+                        <span className="text-[12px] font-semibold text-[#0A0A0A]">{s.title}</span>
+                        <p className="text-[10px] text-[#8A8078] mt-0.5 leading-snug">{s.interpretation.slice(0, 65)}…</p>
                       </div>
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <p className="text-[10px] font-black text-amber-600 uppercase tracking-wider mb-2">핵심 위험</p>
-                <ul className="space-y-2">
+                <p className="text-[9px] font-black text-amber-700 uppercase tracking-[0.2em] mb-3">핵심 위험</p>
+                <ul className="space-y-3">
                   {analysis.risks.slice(0, 4).map((r, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <AlertTriangle className="w-3 h-3 text-amber-500 mt-0.5 shrink-0" />
+                    <li key={i} className="flex items-start gap-2.5">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-500 mt-0.5 shrink-0" />
                       <div>
-                        <span className="text-[11px] font-semibold text-slate-800">{r.title}</span>
-                        <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">{r.interpretation.slice(0, 65)}…</p>
+                        <span className="text-[12px] font-semibold text-[#0A0A0A]">{r.title}</span>
+                        <p className="text-[10px] text-[#8A8078] mt-0.5 leading-snug">{r.interpretation.slice(0, 65)}…</p>
                       </div>
                     </li>
                   ))}
@@ -503,7 +514,7 @@ export default function ReportPageComponent() {
 
           <div className="grid grid-cols-2 gap-8 mb-6">
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">기본 정보</p>
+              <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">기본 정보</p>
               <dl>
                 <DataRow label="주소 / 지역명" value={displayName} highlight />
                 <DataRow label="희망 업종" value={store.desiredBusiness} highlight />
@@ -515,7 +526,7 @@ export default function ReportPageComponent() {
               </dl>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">물리적 조건</p>
+              <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">물리적 조건</p>
               <dl>
                 <DataRow label="층수" value={FLOOR_LABELS[store.floor]} />
                 <DataRow label="전용 면적" value={`${store.areaPyeong}평${store.areaSqm ? ` (${store.areaSqm}㎡)` : ''}`} />
@@ -529,7 +540,7 @@ export default function ReportPageComponent() {
 
           <div className="grid grid-cols-2 gap-8 mb-6">
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">임대 조건</p>
+              <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">임대 조건</p>
               <dl>
                 <DataRow label="보증금" value={formatMoney(store.deposit)} highlight />
                 <DataRow label="월세" value={formatMoney(store.monthlyRent)} highlight />
@@ -539,7 +550,7 @@ export default function ReportPageComponent() {
               </dl>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">입지 조건</p>
+              <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">입지 조건</p>
               <dl>
                 <DataRow label="가시성" value={VISIBILITY_LABELS[store.visibility]} />
                 <DataRow label="도보 접근성" value={accessLabel(store.pedestrianAccess ?? store.walkAccess)} />
@@ -551,7 +562,7 @@ export default function ReportPageComponent() {
           </div>
 
           <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">시설·설비 현황</p>
+            <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">시설·설비 현황</p>
             <div className="grid grid-cols-2 gap-x-8 gap-y-1">
               {[
                 { label: '닥트 (환기) 설치 가능', value: store.duct },
@@ -614,11 +625,11 @@ export default function ReportPageComponent() {
           {/* Location blocks */}
           <div className="space-y-4">
             {locBlocks.map((b, i) => (
-              <div key={i} className="border border-slate-200 rounded-xl overflow-hidden break-inside-avoid">
-                <div className="bg-[#f8f9fb] px-4 py-2 flex items-center gap-2 border-b border-slate-200">
-                  <span className="text-slate-500">{b.icon}</span>
-                  <span className="text-xs font-black text-[#0b1120] uppercase tracking-wide">{b.title}</span>
-                  <span className="ml-auto text-[10px] font-semibold text-slate-400 font-mono">{b.condition}</span>
+              <div key={i} className="border border-[#E8E3DC] rounded-2xl overflow-hidden break-inside-avoid shadow-sm">
+                <div className="bg-[#F2EDE7] px-4 py-2.5 flex items-center gap-2 border-b border-[#E8E3DC]">
+                  <span className="text-[#C24A2C]">{b.icon}</span>
+                  <span className="text-[11px] font-black text-[#0A0A0A] uppercase tracking-wide" style={{ fontFamily: "'Noto Serif KR', serif" }}>{b.title}</span>
+                  <span className="ml-auto text-[9px] font-semibold text-[#9A8F84] font-mono">{b.condition}</span>
                 </div>
                 <div className="px-4 py-3 grid grid-cols-4 gap-3">
                   {[
@@ -628,8 +639,8 @@ export default function ReportPageComponent() {
                     { tag: '현장 확인', text: b.fieldCheck },
                   ].map(({ tag, text }) => (
                     <div key={tag}>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-1">{tag}</p>
-                      <p className="text-[10px] text-slate-600 leading-snug">{text}</p>
+                      <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.15em] mb-1.5">{tag}</p>
+                      <p className="text-[10px] text-[#4A4038] leading-[1.6]">{text}</p>
                     </div>
                   ))}
                 </div>
@@ -644,14 +655,14 @@ export default function ReportPageComponent() {
         <ReportPage pageNum={4} totalPages={TOTAL}>
           <PageSection label="업종 적합성" icon={<Users className="w-4 h-4" />} />
 
-          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <div className="mb-4 bg-[#F7F4F0] border border-[#E8E3DC] rounded-xl p-4">
             <p className="text-xs font-bold text-slate-600 mb-1">업종 적합도 평가</p>
             <p className="text-xs text-slate-600 leading-relaxed">{analysis.scores.businessFit.interpretation}</p>
           </div>
 
           <div className="mb-5">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">업종별 세부 항목 평가</p>
-            <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden">
+            <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">업종별 세부 항목 평가</p>
+            <div className="divide-y divide-slate-100 border border-[#E8E3DC] rounded-xl overflow-hidden">
               {bizRows.map((row, i) => (
                 <div key={i} className="flex items-start gap-3 px-4 py-3 bg-white hover:bg-slate-50">
                   <BizBadge status={row.status} />
@@ -704,7 +715,7 @@ export default function ReportPageComponent() {
 
           <div className="grid grid-cols-2 gap-8 mb-5">
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">임대 조건</p>
+              <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">임대 조건</p>
               <dl>
                 <DataRow label="보증금" value={formatMoney(store.deposit)} highlight />
                 <DataRow label="월세" value={formatMoney(store.monthlyRent)} highlight />
@@ -714,7 +725,7 @@ export default function ReportPageComponent() {
               </dl>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-3">임대조건 점수</p>
+              <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.2em] mb-3">임대조건 점수</p>
               {(() => {
                 const sg = gradeColor(analysis.scores.rent.grade)
                 return (
@@ -725,14 +736,14 @@ export default function ReportPageComponent() {
                   </div>
                 )
               })()}
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+              <div className="bg-[#F7F4F0] border border-[#E8E3DC] rounded-xl p-3">
                 <p className="text-[10px] text-slate-600 leading-snug">{analysis.scores.rent.interpretation}</p>
               </div>
             </div>
           </div>
 
           {ra && (
-            <div className="bg-[#f8f9fb] border border-slate-200 rounded-xl p-5 mb-5">
+            <div className="bg-[#F7F4F0] border border-[#E8E3DC] rounded-xl p-5 mb-5">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm font-bold text-slate-700">임대료 부담 분석</p>
                 <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${riskColor(ra.riskLevel).badge}`}>
@@ -763,7 +774,7 @@ export default function ReportPageComponent() {
           )}
 
           {store.expectedMonthlySales && store.expectedMonthlySales > 0 ? (
-            <div className="border border-slate-200 rounded-xl overflow-hidden">
+            <div className="border border-[#E8E3DC] rounded-xl overflow-hidden">
               <div className="bg-[#f8f9fb] px-4 py-2 border-b border-slate-200">
                 <p className="text-[10px] font-black text-slate-600 uppercase tracking-wider">손익 시뮬레이션 (입력값 기준 참고)</p>
               </div>
@@ -782,7 +793,7 @@ export default function ReportPageComponent() {
               </div>
             </div>
           ) : (
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div className="bg-[#F7F4F0] border border-[#E8E3DC] rounded-xl p-4">
               <p className="text-xs font-bold text-slate-600 mb-1">예상매출 미입력</p>
               <p className="text-xs text-slate-500 leading-relaxed">
                 월세 {formatMoney(store.monthlyRent)}를 10% 기준으로 관리하려면 약 {ra ? formatMoney(ra.referenceSalesAt10pct) : '—'}의 월매출이 필요합니다.
@@ -840,7 +851,7 @@ export default function ReportPageComponent() {
             })}
           </div>
 
-          <div className="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <div className="mt-5 bg-[#F7F4F0] border border-[#E8E3DC] rounded-xl p-4">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2">위험 종합 점수</p>
             <div className="grid grid-cols-2 gap-4">
               {(() => {
@@ -885,7 +896,7 @@ export default function ReportPageComponent() {
             )
           })()}
 
-          <div className="border border-slate-200 rounded-xl overflow-hidden mb-5">
+          <div className="border border-[#E8E3DC] rounded-xl overflow-hidden mb-5">
             {analysis.contractChecks.map((check, i) => (
               <div key={check.id} className={`flex items-start justify-between px-4 py-2.5 gap-3 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'} border-b border-slate-100 last:border-0`}>
                 <div className="flex items-start gap-2 flex-1">
@@ -936,7 +947,7 @@ export default function ReportPageComponent() {
         <ReportPage pageNum={8} totalPages={TOTAL}>
           <PageSection label="상권 데이터 현황" icon={<BarChart3 className="w-4 h-4" />} />
 
-          <div className="mb-4 bg-slate-100 border border-slate-200 rounded-xl p-4 text-center">
+          <div className="mb-4 bg-slate-100 border border-[#E8E3DC] rounded-xl p-4 text-center">
             <p className="text-sm font-bold text-slate-400 mb-1">전체 상권 데이터 미연결</p>
             <p className="text-xs text-slate-400">
               아래 항목들은 현재 외부 데이터 소스와 연결되지 않았습니다. 향후 데이터 연계 시 분석 정밀도가 크게 향상됩니다.
@@ -982,7 +993,7 @@ export default function ReportPageComponent() {
                 fieldNote: '인근 부동산 중개소 2~3곳 방문 시세 확인',
               },
             ].map(({ title, icon, desc, fieldNote }) => (
-              <div key={title} className="border border-slate-200 rounded-xl p-4 bg-white">
+              <div key={title} className="border border-[#E8E3DC] rounded-xl p-4 bg-white">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-slate-400">{icon}</span>
                   <span className="text-xs font-bold text-slate-700">{title}</span>
@@ -1034,18 +1045,18 @@ export default function ReportPageComponent() {
           </div>
 
           <div className="space-y-4 mb-6">
-            <p className="text-sm text-slate-700 leading-relaxed">{opinionP1}</p>
-            <p className="text-sm text-slate-700 leading-relaxed">{opinionP2}</p>
-            <p className="text-sm text-slate-700 leading-relaxed">{opinionP3}</p>
-            <p className="text-sm text-slate-700 leading-relaxed">{opinionP4}</p>
-            <p className="text-sm text-slate-700 leading-relaxed">{opinionP5}</p>
+            <p className="text-[13px] text-[#3D3730] leading-[1.85]">{opinionP1}</p>
+            <p className="text-[13px] text-[#3D3730] leading-[1.85]">{opinionP2}</p>
+            <p className="text-[13px] text-[#3D3730] leading-[1.85]">{opinionP3}</p>
+            <p className="text-[13px] text-[#3D3730] leading-[1.85]">{opinionP4}</p>
+            <p className="text-[12px] text-[#8A8078] leading-[1.8]">{opinionP5}</p>
           </div>
 
           {/* Final verdict card */}
-          <div className={`rounded-2xl border-2 ${gc.border} p-6 text-center mb-5`}>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">최종 판단</p>
-            <p className={`text-2xl font-black ${gc.text} mb-1`}>{RECOMMENDATION_LABELS[analysis.recommendation]}</p>
-            <p className="text-xs text-slate-500 mb-3">{displayName} · {store.desiredBusiness} · {FLOOR_LABELS[store.floor]}</p>
+          <div className={`rounded-2xl border-2 ${gc.border} p-6 text-center mb-5 bg-[#FDFCFA]`}>
+            <p className="text-[9px] font-black text-[#9A8F84] uppercase tracking-[0.25em] mb-2">최종 판단</p>
+            <p className={`text-[1.5rem] font-black ${gc.text} mb-1`} style={{ fontFamily: "'Noto Serif KR', serif" }}>{RECOMMENDATION_LABELS[analysis.recommendation]}</p>
+            <p className="text-[11px] text-[#9A8F84] mb-3">{displayName} · {store.desiredBusiness} · {FLOOR_LABELS[store.floor]}</p>
             <div className="flex items-center justify-center gap-6">
               <div>
                 <p className={`text-3xl font-black ${gc.text}`}>{analysis.overallGrade}</p>
@@ -1064,8 +1075,8 @@ export default function ReportPageComponent() {
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
-            <p className="text-[10px] text-slate-400 leading-relaxed">
+          <div className="bg-[#F7F4F0] border border-[#E8E3DC] rounded-xl p-4">
+            <p className="text-[10px] text-[#9A8F84] leading-relaxed">
               본 리포트는 입력된 점포조건을 기반으로 분석 엔진이 생성한 참고자료입니다.
               최종 계약 결정은 반드시 현장 방문, 임대인 확인, 법률·세무 전문가 검토를 병행하십시오.
               상권연구소 AI PRO V0.1은 의사결정 지원 서비스이며, 투자 성과를 보장하지 않습니다.
@@ -1073,9 +1084,9 @@ export default function ReportPageComponent() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-200">
-            <p className="text-[10px] text-slate-400">상권연구소 AI PRO V0.1 · 의사결정 지원 서비스</p>
-            <p className="text-[10px] text-slate-400">{createdDate}</p>
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-[#E8E3DC]">
+            <p className="text-[9px] text-[#B8AFA6] tracking-widest uppercase">상권연구소 AI PRO V0.1 · 의사결정 지원 서비스</p>
+            <p className="text-[9px] text-[#B8AFA6]">{createdDate}</p>
           </div>
         </ReportPage>
 
