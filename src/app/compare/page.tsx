@@ -30,7 +30,7 @@ const miniSchema = z.object({
 
 type MiniForm = z.infer<typeof miniSchema>
 
-const inputClass = `w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors`
+const inputClass = `w-full px-3 py-2 text-sm border border-[#E0DED9] rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C24A2C]/30 focus:border-[#C24A2C] transition-colors`
 const selectClass = `${inputClass} cursor-pointer`
 
 function formToStore(data: MiniForm): Store {
@@ -382,7 +382,7 @@ export default function ComparePage() {
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-          <GitCompare className="w-6 h-6 text-blue-600" />
+          <GitCompare className="w-6 h-6 text-[#C24A2C]" />
           어느 점포가 이 업종에 더 적합할까요?
         </h1>
         <p className="text-slate-500 text-sm">두 후보 점포를 동일한 기준으로 비교합니다. 주소와 조건을 입력하세요.</p>
@@ -404,7 +404,7 @@ export default function ComparePage() {
         <button
           onClick={onCompare}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#0f172a] text-white text-sm font-semibold hover:bg-slate-800 transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#C24A2C] text-white text-sm font-semibold hover:bg-[#A83D23] transition-colors disabled:opacity-60"
         >
           {loading ? '분석 중…' : '비교 분석 시작'}
           {!loading && <ChevronRight className="w-4 h-4" />}

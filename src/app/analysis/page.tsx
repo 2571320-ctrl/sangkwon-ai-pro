@@ -57,13 +57,13 @@ const TEST_DEFAULTS: StoreFormValues = {
   memo: '',
 }
 
-const selectClass = `w-full px-3 py-2 text-sm border border-slate-300 rounded-lg
-  bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500
-  focus:border-blue-500 transition-colors cursor-pointer`
+const selectClass = `w-full px-3 py-2 text-sm border border-[#E0DED9] rounded-lg
+  bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#C24A2C]/30
+  focus:border-[#C24A2C] transition-colors cursor-pointer`
 
-const inputClass = `w-full px-3 py-2 text-sm border border-slate-300 rounded-lg
+const inputClass = `w-full px-3 py-2 text-sm border border-[#E0DED9] rounded-lg
   bg-white text-slate-900 placeholder-slate-400
-  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+  focus:outline-none focus:ring-2 focus:ring-[#C24A2C]/30 focus:border-[#C24A2C]
   transition-colors`
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
@@ -279,7 +279,7 @@ export default function AnalysisPage() {
                 onClick={() => setValue('isCorner', !isCorner)}
                 className={`w-full px-3 py-2 text-sm border rounded-lg font-medium transition-colors ${
                   isCorner
-                    ? 'bg-blue-50 border-blue-300 text-blue-700'
+                    ? 'bg-[#F4EBE7] border-[#C24A2C] text-[#C24A2C]'
                     : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'
                 }`}
               >
@@ -349,7 +349,7 @@ export default function AnalysisPage() {
                   type="button"
                   onClick={() => setValue('vatIncluded', !vatIncluded)}
                   className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                    vatIncluded ? 'bg-blue-600 border-blue-600' : 'border-slate-300 bg-white'
+                    vatIncluded ? 'bg-[#C24A2C] border-[#C24A2C]' : 'border-slate-300 bg-white'
                   }`}
                 >
                   {vatIncluded && (
@@ -399,7 +399,7 @@ export default function AnalysisPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#0f172a] text-white text-sm font-semibold hover:bg-slate-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#C24A2C] text-white text-sm font-semibold hover:bg-[#A83D23] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? '분석 중…' : '상권분석 시작'}
             {!isSubmitting && <ChevronRight className="w-4 h-4" />}

@@ -38,7 +38,7 @@ export default function SettingsPage() {
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
             <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <Info className="w-4 h-4 text-blue-500" />
+              <Info className="w-4 h-4 text-[#C24A2C]" />
               서비스 상태
             </h3>
           </div>
@@ -47,7 +47,7 @@ export default function SettingsPage() {
               label="현재 버전"
               description="상권연구소 AI PRO MVP"
             >
-              <span className="text-sm font-mono font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">V0.1</span>
+              <span className="text-sm font-mono font-bold text-[#C24A2C] bg-[#F4EBE7] px-2 py-1 rounded">V0.1</span>
             </SettingRow>
             <SettingRow
               label="데이터 분석 모드"
@@ -123,7 +123,7 @@ export default function SettingsPage() {
               label="분석 엔진 모드"
               description="입력 → 규칙 → 점수 → 해석 → 결과 구조로 동작합니다."
             >
-              <span className="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-semibold text-[#C24A2C] bg-[#F4EBE7] border border-[#C24A2C]/20 px-2.5 py-1 rounded-full">
                 규칙 기반
               </span>
             </SettingRow>

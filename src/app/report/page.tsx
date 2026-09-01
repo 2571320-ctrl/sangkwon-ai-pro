@@ -27,7 +27,7 @@ export default function ReportListPage() {
         <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
           <FileText className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500 text-sm font-medium mb-4">생성된 리포트가 없습니다</p>
-          <Link href="/analysis" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0f172a] text-white text-sm font-semibold">
+          <Link href="/analysis" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C24A2C] hover:bg-[#A83D23] text-white text-sm font-semibold">
             점포 분석 시작
           </Link>
         </div>

@@ -36,7 +36,7 @@ export default function HistoryPage() {
           <Clock className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500 text-sm font-medium mb-1">분석 기록이 없습니다</p>
           <p className="text-slate-400 text-xs mb-4">점포를 분석하면 여기에 기록이 쌓입니다.</p>
-          <Link href="/analysis" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0f172a] text-white text-sm font-semibold">
+          <Link href="/analysis" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C24A2C] hover:bg-[#A83D23] text-white text-sm font-semibold">
             첫 분석 시작하기
           </Link>
         </div>
@@ -67,7 +67,7 @@ export default function HistoryPage() {
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">
                             {FLOOR_LABELS[store.floor]} · {store.areaPyeong}평
                           </span>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#F4EBE7] text-[#C24A2C]">
                             {store.desiredBusiness}
                           </span>
                           <span className="text-xs text-slate-400">

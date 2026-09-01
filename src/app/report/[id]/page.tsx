@@ -387,7 +387,7 @@ export default function ReportPageComponent() {
             <button
               onClick={handlePptExport}
               disabled={pptLoading}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1d4ed8] text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C24A2C] text-white text-sm font-semibold hover:bg-[#A83D23] transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
               <FileDown className="w-4 h-4" />
               {pptLoading ? 'PPT 생성 중…' : 'PPT 저장'}
             </button>
@@ -411,7 +411,7 @@ export default function ReportPageComponent() {
           {/* Cover section */}
           <div className="bg-[#0b1120] px-12 pt-12 pb-8 flex flex-col justify-between" style={{ minHeight: '45%' }}>
             <div>
-              <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-8">
+              <p className="text-[10px] font-black text-[#D4846A] uppercase tracking-widest mb-8">
                 상권연구소 AI PRO · Store Location Analysis Report
               </p>
               <h1 className="text-3xl font-black text-white mb-2 leading-tight">
@@ -481,11 +481,11 @@ export default function ReportPageComponent() {
             </div>
 
             {ba && ba.mustCheckFactors.length > 0 && (
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                <p className="text-[10px] font-black text-blue-700 uppercase tracking-wider mb-2">계약 전 핵심 확인사항</p>
+              <div className="bg-[#F4EBE7] border border-[#C24A2C]/15 rounded-xl p-4">
+                <p className="text-[10px] font-black text-[#C24A2C] uppercase tracking-wider mb-2">계약 전 핵심 확인사항</p>
                 <div className="flex flex-wrap gap-1.5">
                   {ba.mustCheckFactors.slice(0, 5).map((f, i) => (
-                    <span key={i} className="text-[10px] bg-blue-100 text-blue-800 rounded-full px-2.5 py-1 font-medium">
+                    <span key={i} className="text-[10px] bg-[#C24A2C]/10 text-[#7a2e1a] rounded-full px-2.5 py-1 font-medium">
                       {f.split('—')[0].trim()}
                     </span>
                   ))}
@@ -667,13 +667,13 @@ export default function ReportPageComponent() {
           {ba && (
             <>
               {ba.mustCheckFactors.length > 0 && (
-                <div className="mb-4 bg-blue-50 border border-blue-100 rounded-xl p-4">
-                  <p className="text-[10px] font-black text-blue-700 uppercase tracking-wider mb-2">업종별 필수 확인 항목</p>
+                <div className="mb-4 bg-[#F4EBE7] border border-[#C24A2C]/15 rounded-xl p-4">
+                  <p className="text-[10px] font-black text-[#C24A2C] uppercase tracking-wider mb-2">업종별 필수 확인 항목</p>
                   <ol className="space-y-1.5">
                     {ba.mustCheckFactors.map((f, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="text-[10px] font-black text-blue-400 mt-0.5 shrink-0">{i + 1}.</span>
-                        <span className="text-[11px] text-blue-800 leading-snug">{f}</span>
+                        <span className="text-[10px] font-black text-[#C24A2C] mt-0.5 shrink-0">{i + 1}.</span>
+                        <span className="text-[11px] text-[#7a2e1a] leading-snug">{f}</span>
                       </li>
                     ))}
                   </ol>
@@ -996,8 +996,8 @@ export default function ReportPageComponent() {
             ))}
           </div>
 
-          <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4">
-            <p className="text-[10px] font-black text-blue-700 uppercase tracking-wider mb-1">데이터 연결 후 향상 가능한 분석</p>
+          <div className="mt-4 bg-[#F4EBE7] border border-[#C24A2C]/15 rounded-xl p-4">
+            <p className="text-[10px] font-black text-[#C24A2C] uppercase tracking-wider mb-1">데이터 연결 후 향상 가능한 분석</p>
             <div className="flex flex-wrap gap-2 mt-2">
               {[
                 '업종별 상권 매출 적합성 정밀 분석',
@@ -1006,7 +1006,7 @@ export default function ReportPageComponent() {
                 '배후 세대 수요 추정',
                 '유사 상권 비교 분석',
               ].map(item => (
-                <span key={item} className="text-[10px] bg-blue-100 text-blue-700 rounded-full px-2 py-0.5 font-medium">
+                <span key={item} className="text-[10px] bg-[#C24A2C]/10 text-[#7a2e1a] rounded-full px-2 py-0.5 font-medium">
                   {item}
                 </span>
               ))}

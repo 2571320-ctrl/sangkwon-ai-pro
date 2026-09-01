@@ -121,7 +121,7 @@ function ChecklistItem({ check, analysisId }: { check: import('@/types').Contrac
 function DataBadge({ label, value, color = 'slate', sub }: { label: string; value: string; color?: 'slate' | 'blue' | 'emerald' | 'amber' | 'red'; sub?: string }) {
   const colors: Record<string, string> = {
     slate: 'bg-slate-50 border-slate-100',
-    blue: 'bg-blue-50 border-blue-100',
+    blue: 'bg-[#F4EBE7] border-[#C24A2C]/10',
     emerald: 'bg-emerald-50 border-emerald-100',
     amber: 'bg-amber-50 border-amber-100',
     red: 'bg-red-50 border-red-100',
@@ -217,7 +217,7 @@ export default function AnalysisResultPage() {
               <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700">
                 {FLOOR_LABELS[store.floor]} · {store.areaPyeong}평
               </span>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#F4EBE7] text-[#C24A2C]">
                 {store.desiredBusiness}
               </span>
               {store.frontageMeters > 0 && (
@@ -398,8 +398,8 @@ export default function AnalysisResultPage() {
                 <p className="text-xs text-slate-700 leading-relaxed">{ra.interpretation}</p>
               </div>
               {ra.rentRatioPct === null && (
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-                  <p className="text-xs text-blue-700 font-medium">
+                <div className="bg-[#F4EBE7] border border-[#C24A2C]/15 rounded-xl p-3">
+                  <p className="text-xs text-[#C24A2C] font-medium">
                     예상 월매출을 입력하면 임대료 비율을 정확히 계산할 수 있습니다. 점포 입력 화면에서 추가하거나 AI에게 알려주세요.
                   </p>
                 </div>
@@ -473,13 +473,13 @@ export default function AnalysisResultPage() {
                 </ul>
               </div>
             )}
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-              <p className="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-2">반드시 확인할 요소</p>
+            <div className="bg-[#F4EBE7] border border-[#C24A2C]/15 rounded-xl p-4">
+              <p className="text-[10px] font-bold text-[#C24A2C] uppercase tracking-wider mb-2">반드시 확인할 요소</p>
               <ul className="space-y-1.5">
                 {ba.mustCheckFactors.map((f, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-[10px] font-bold text-blue-500 mt-0.5 shrink-0">{i + 1}.</span>
-                    <span className="text-xs text-blue-800">{f}</span>
+                    <span className="text-[10px] font-bold text-[#C24A2C] mt-0.5 shrink-0">{i + 1}.</span>
+                    <span className="text-xs text-[#7a2e1a]">{f}</span>
                   </li>
                 ))}
               </ul>
@@ -574,14 +574,14 @@ export default function AnalysisResultPage() {
         </Link>
         <Link
           href={`/report/${analysis.id}`}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#0f172a] text-white text-sm font-semibold hover:bg-slate-800 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#C24A2C] text-white text-sm font-semibold hover:bg-[#A83D23] transition-colors"
         >
           <FileText className="w-4 h-4" />
           고객 리포트 보기
         </Link>
         <Link
           href="/chat"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 text-sm font-semibold hover:bg-blue-100 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#C24A2C]/20 bg-[#F4EBE7] text-[#C24A2C] text-sm font-semibold hover:bg-[#F4EBE7]/70 transition-colors"
         >
           <MessageSquare className="w-4 h-4" />
           AI에게 이 결과 질문하기
