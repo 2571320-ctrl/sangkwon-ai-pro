@@ -174,8 +174,8 @@ export default function LandingPage() {
       </nav>
 
       {/* ══ HERO ═════════════════════════════════════════════════════════════ */}
-      <section style={{ background: 'var(--white)', padding: 'clamp(48px, 8vw, 72px) clamp(20px, 4vw, 40px) clamp(40px, 6vw, 64px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <section style={{ background: 'var(--white)', padding: 'clamp(48px, 8vw, 72px) 0 clamp(40px, 6vw, 64px)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
           <div className="l-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(40px, 6vw, 72px)', alignItems: 'center' }}>
             {/* Left: text */}
             <div>
@@ -237,7 +237,8 @@ export default function LandingPage() {
       </div>
 
       {/* ══ PAIN POINTS (chat demo) ══════════════════════════════════════════ */}
-      <section style={{ background: 'var(--gray)', padding: 'clamp(48px, 8vw, 80px) clamp(20px, 4vw, 40px)' }}>
+      <section style={{ background: 'var(--gray)', padding: 'clamp(48px, 8vw, 80px) 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 12, textTransform: 'uppercase' }}>창업자의 고민</div>
@@ -278,10 +279,12 @@ export default function LandingPage() {
             <Link href="/chat" className="l-btn-primary">AI에게 직접 물어보기 →</Link>
           </div>
         </div>
+        </div>
       </section>
 
       {/* ══ FOUNDER ══════════════════════════════════════════════════════════ */}
-      <section style={{ background: 'white', padding: 'clamp(48px, 8vw, 80px) clamp(20px, 4vw, 40px)' }}>
+      <section style={{ background: 'white', padding: 'clamp(48px, 8vw, 80px) 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
         <div className="l-founder-grid" style={{ maxWidth: 880, margin: '0 auto', display: 'grid', gridTemplateColumns: '200px 1fr', gap: 56, alignItems: 'center' }}>
           <div className="l-founder-photo" style={{ width: 200, height: 200, borderRadius: 16, overflow: 'hidden', flexShrink: 0, margin: 0, boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
             <img src="/contract.png" alt="부동산 임대차 계약서" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
@@ -301,10 +304,12 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
+        </div>
       </section>
 
       {/* ══ VS TABLE ═════════════════════════════════════════════════════════ */}
-      <section style={{ background: 'var(--gray)', padding: 'clamp(48px, 8vw, 80px) clamp(20px, 4vw, 40px)' }}>
+      <section style={{ background: 'var(--gray)', padding: 'clamp(48px, 8vw, 80px) 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
         <div style={{ maxWidth: 880, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 12, textTransform: 'uppercase' }}>비교</div>
@@ -341,11 +346,12 @@ export default function LandingPage() {
             </table>
           </div>
         </div>
+        </div>
       </section>
 
       {/* ══ PROCESS ══════════════════════════════════════════════════════════ */}
-      <section id="process" style={{ background: 'white', padding: 'clamp(48px, 8vw, 80px) clamp(20px, 4vw, 40px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <section id="process" style={{ background: 'white', padding: 'clamp(48px, 8vw, 80px) 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 12, textTransform: 'uppercase' }}>이용 방법</div>
             <h2 className="l-serif" style={{ fontSize: 'clamp(24px, 3.5vw, 38px)', fontWeight: 800, color: 'var(--ink)' }}>
@@ -353,7 +359,7 @@ export default function LandingPage() {
             </h2>
           </div>
           {/* Steps + MockupCard side layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(32px, 5vw, 56px)', alignItems: 'center' }} className="l-process-main">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(32px, 5vw, 56px)', alignItems: 'stretch' }} className="l-process-main">
             {/* Steps */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }} className="l-process-grid">
               {[
@@ -389,34 +395,30 @@ export default function LandingPage() {
                 </Link>
               </div>
             </div>
-            {/* MockupCard showcase */}
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <div style={{ position: 'relative', width: '100%', maxWidth: 420 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textAlign: 'center', marginBottom: 12, letterSpacing: '0.06em', textTransform: 'uppercase' }}>분석 결과 미리보기</div>
-                <div style={{
-                  position: 'absolute', inset: -16,
-                  background: 'var(--gray)', borderRadius: 28, zIndex: 0,
-                }} />
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                  <MockupCard
-                    score={68}
-                    grade="B+"
-                    rentBurden={10.8}
-                    premiumMonths={22}
-                    bizFit="적합"
-                    address="천안시 서북구 두정동"
-                    category="한식 일반음식점"
-                  />
-                </div>
-              </div>
+            {/* MockupCard showcase — panel fills full row height */}
+            <div style={{
+              background: 'var(--gray)', borderRadius: 20,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              padding: '28px 24px', gap: 16,
+            }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textAlign: 'center', letterSpacing: '0.06em', textTransform: 'uppercase' }}>분석 결과 미리보기</div>
+              <MockupCard
+                score={68}
+                grade="B+"
+                rentBurden={10.8}
+                premiumMonths={22}
+                bizFit="적합"
+                address="천안시 서북구 두정동"
+                category="한식 일반음식점"
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* ══ PRICING ══════════════════════════════════════════════════════════ */}
-      <section id="pricing" style={{ background: 'var(--gray)', padding: 'clamp(48px, 8vw, 80px) clamp(20px, 4vw, 40px)' }}>
-        <div style={{ maxWidth: 920, margin: '0 auto' }}>
+      <section id="pricing" style={{ background: 'var(--gray)', padding: 'clamp(48px, 8vw, 80px) 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 12, textTransform: 'uppercase' }}>가격</div>
             <h2 className="l-serif" style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 800, color: 'var(--ink)' }}>
@@ -492,7 +494,8 @@ export default function LandingPage() {
       </section>
 
       {/* ══ FAQ ══════════════════════════════════════════════════════════════ */}
-      <section id="faq" style={{ background: 'white', padding: 'clamp(48px, 8vw, 80px) clamp(20px, 4vw, 40px)' }}>
+      <section id="faq" style={{ background: 'white', padding: 'clamp(48px, 8vw, 80px) 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 12, textTransform: 'uppercase' }}>FAQ</div>
@@ -518,10 +521,12 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
+        </div>
       </section>
 
       {/* ══ CTA BAND ═════════════════════════════════════════════════════════ */}
-      <section style={{ background: 'var(--ink)', padding: 'clamp(52px, 8vw, 88px) clamp(20px, 4vw, 40px)', textAlign: 'center' }}>
+      <section style={{ background: 'var(--ink)', padding: 'clamp(52px, 8vw, 88px) 0', textAlign: 'center' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
         <div style={{ maxWidth: 580, margin: '0 auto' }}>
           <h2 className="l-serif" style={{
             fontSize: 'clamp(28px, 4.5vw, 46px)', fontWeight: 900,
@@ -538,11 +543,13 @@ export default function LandingPage() {
             지금 바로 무료 분석받기 →
           </Link>
         </div>
+        </div>
       </section>
 
       {/* ══ FOOTER ═══════════════════════════════════════════════════════════ */}
-      <footer className="l-page-bottom" style={{ background: '#111', padding: 'clamp(32px, 5vw, 44px) clamp(20px, 4vw, 40px) clamp(24px, 4vw, 36px)', color: 'rgba(255,255,255,0.45)' }}>
-        <div className="l-footer-inner" style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 28 }}>
+      <footer className="l-page-bottom" style={{ background: '#111', padding: 'clamp(32px, 5vw, 44px) 0 clamp(24px, 4vw, 36px)', color: 'rgba(255,255,255,0.45)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px, 4vw, 40px)' }}>
+        <div className="l-footer-inner" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 28 }}>
           <div>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'white', marginBottom: 10 }}>상권연구소 AI PRO</div>
             <div style={{ fontSize: 12, lineHeight: 1.9 }}>
@@ -569,8 +576,9 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-        <div style={{ maxWidth: 900, margin: '24px auto 0', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, fontSize: 11 }}>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: 24, paddingTop: 20, fontSize: 11 }}>
           © 2026 상권연구소 AI. 본 서비스는 투자·법률 자문이 아닙니다. 최종 계약 판단은 전문가와 함께하시기 바랍니다.
+        </div>
         </div>
       </footer>
 
