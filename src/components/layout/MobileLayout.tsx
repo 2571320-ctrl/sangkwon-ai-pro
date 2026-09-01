@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
+import Link from 'next/link'
 import { ChatSidebar } from '@/components/chat/ChatSidebar'
 
 export function MobileLayout({ children }: { children: React.ReactNode }) {
@@ -49,7 +50,7 @@ export function MobileLayout({ children }: { children: React.ReactNode }) {
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="font-bold text-sm text-[#0A0A0A]">상권연구소 AI PRO</span>
+          <Link href="/" className="font-bold text-sm text-[#0A0A0A] hover:text-[#C24A2C] transition-colors">상권연구소 AI PRO</Link>
         </header>
 
         <main id="main-scroll" className="flex-1 overflow-y-auto bg-[#F4F3F0]">
