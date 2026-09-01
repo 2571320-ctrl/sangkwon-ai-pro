@@ -35,7 +35,7 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
       {/* Logo + new chat */}
       <div className="px-3 pt-5 pb-3">
         <div className="flex items-center justify-between mb-4 px-2">
-          <a href="/" className="flex items-center gap-2.5">
+          <Link href="/" prefetch={false} className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-[#0A0A0A] rounded-xl flex items-center justify-center shrink-0">
               <BarChart3 className="w-4 h-4 text-white" />
             </div>
@@ -43,7 +43,7 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
               <div className="text-[#0f172a] text-sm font-bold">상권연구소</div>
               <div className="text-slate-400 text-[11px]">AI PRO V0.1</div>
             </div>
-          </a>
+          </Link>
           {/* 닫기 버튼 — 모바일에서만 표시 */}
           <button
             onClick={onClose}
