@@ -292,6 +292,50 @@ export default function ReportPageComponent() {
     year: 'numeric', month: 'long', day: 'numeric',
   })
 
+  // Raw hex colors for cover inline styles
+  const GRADE_HEX: Record<string, { text: string; glow: string; border: string }> = {
+    'A+': { text: '#34D399', glow: 'rgba(52,211,153,0.18)', border: 'rgba(52,211,153,0.45)' },
+    'A':  { text: '#60A5FA', glow: 'rgba(96,165,250,0.18)', border: 'rgba(96,165,250,0.45)' },
+    'B+': { text: '#A5B4FC', glow: 'rgba(165,180,252,0.18)', border: 'rgba(165,180,252,0.45)' },
+    'B':  { text: '#CBD5E1', glow: 'rgba(203,213,225,0.12)', border: 'rgba(203,213,225,0.35)' },
+    'C':  { text: '#FCD34D', glow: 'rgba(252,211,77,0.18)', border: 'rgba(252,211,77,0.40)' },
+    'D':  { text: '#FCA5A5', glow: 'rgba(252,165,165,0.18)', border: 'rgba(252,165,165,0.40)' },
+  }
+  const REC_HEX: Record<string, { text: string; border: string; label: string }> = {
+    primary:     { text: '#34D399', border: 'rgba(52,211,153,0.35)',  label: '우선 검토' },
+    conditional: { text: '#A5B4FC', border: 'rgba(165,180,252,0.35)', label: '조건부 검토' },
+    caution:     { text: '#FCD34D', border: 'rgba(252,211,77,0.35)',  label: '신중 검토' },
+    review:      { text: '#FCA5A5', border: 'rgba(252,165,165,0.35)', label: '재검토 필요' },
+  }
+  const gh = GRADE_HEX[analysis.overallGrade] ?? GRADE_HEX['B']
+  const rh = REC_HEX[analysis.recommendation] ?? REC_HEX['conditional']
+  const coverMetrics = [
+    {
+      label: '임대료 비율',
+      value: ra?.rentRatioPct != null ? `${ra.rentRatioPct.toFixed(1)}%` : '—',
+      sub: '기준 10~12%',
+      alert: ra?.rentRatioPct != null && ra.rentRatioPct > 15,
+    },
+    {
+      label: '권리금',
+      value: store.premium > 0 ? formatMoney(store.premium) : '없음',
+      sub: '권리금 투자금액',
+      alert: store.premium > 50_000_000,
+    },
+    {
+      label: '종합 점수',
+      value: `${analysis.overallScore}점`,
+      sub: '100점 만점',
+      alert: analysis.overallScore < 60,
+    },
+    {
+      label: '위험 항목',
+      value: `${analysis.risks.length}건`,
+      sub: '계약 전 확인 필요',
+      alert: analysis.risks.length >= 4,
+    },
+  ]
+
   const locBlocks = buildLocationBlocks(store)
   const bizRows = buildBizFitRows(store, ba)
 
@@ -414,40 +458,129 @@ export default function ReportPageComponent() {
             PAGE 1 — 표지 + Executive Summary
             ═══════════════════════════════ */}
         <ReportPage pageNum={1} totalPages={TOTAL} noPadding darkBg>
-          {/* Cover section */}
-          <div className="bg-[#0b1120] px-12 pt-14 pb-10 flex flex-col justify-between" style={{ minHeight: '48%' }}>
-            {/* Brand line */}
-            <div>
-              <div className="flex items-center gap-3 mb-10">
-                <div className="w-6 h-[1px] bg-[#C24A2C]" />
-                <p className="text-[9px] font-bold text-[#C24A2C] uppercase tracking-[0.3em]">
+          {/* Cover section — redesigned */}
+          <div style={{ background: '#080D18', position: 'relative', overflow: 'hidden' }}>
+
+            {/* Decorative geometric rings (top-right) */}
+            <div style={{ position: 'absolute', top: -80, right: -60, width: 340, height: 340, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.12)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: -30, right: -10, width: 240, height: 240, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.07)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: 20, right: 40, width: 130, height: 130, borderRadius: '50%', border: '1px solid rgba(194,74,44,0.06)', pointerEvents: 'none' }} />
+            {/* Subtle diagonal grid */}
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
+
+            {/* Top accent bar */}
+            <div style={{ height: 3, background: 'linear-gradient(90deg, #C24A2C 0%, #E07050 55%, transparent 100%)' }} />
+
+            {/* Main content area */}
+            <div style={{ padding: '36px 48px 0', position: 'relative', zIndex: 1 }}>
+
+              {/* Eyebrow */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 36 }}>
+                <div style={{ width: 28, height: 1, background: '#C24A2C', flexShrink: 0 }} />
+                <span style={{ fontSize: 9, fontWeight: 700, color: '#C24A2C', letterSpacing: '0.28em', textTransform: 'uppercase' }}>
                   상권연구소 AI PRO · Store Location Analysis
-                </p>
+                </span>
               </div>
-              <h1 className="text-[2.1rem] font-black text-white leading-[1.2] mb-3" style={{ fontFamily: "'Noto Serif KR', serif", letterSpacing: '-0.01em' }}>
-                점포 · 입지<br />분석 리포트
-              </h1>
-              <div className="w-12 h-[2px] bg-[#C24A2C] my-5" />
-              <p className="text-[#A89B8A] text-sm font-medium leading-relaxed">{displayName}</p>
-              <p className="text-[#6B6057] text-[11px] mt-1.5 tracking-wide">
-                {store.desiredBusiness} · {FLOOR_LABELS[store.floor]} · {store.areaPyeong}평
-              </p>
+
+              {/* Title + Grade plate */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 32 }}>
+
+                {/* Left: title block */}
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 18, fontWeight: 500 }}>
+                    Commercial Location Intelligence
+                  </p>
+                  <h1 style={{
+                    fontFamily: "'Noto Serif KR', serif",
+                    fontSize: '2.35rem', fontWeight: 900, color: 'white',
+                    lineHeight: 1.2, letterSpacing: '-0.01em', margin: '0 0 20px',
+                  }}>
+                    점포 · 입지<br />분석 리포트
+                  </h1>
+                  <div style={{ width: 40, height: 2, background: 'linear-gradient(90deg, #C24A2C, #E07050)', marginBottom: 22 }} />
+                  <p style={{ fontSize: 14, color: '#B8AFA6', fontWeight: 600, marginBottom: 6, lineHeight: 1.4 }}>{displayName}</p>
+                  <p style={{ fontSize: 11, color: '#5A5148', letterSpacing: '0.06em', lineHeight: 1.6 }}>
+                    {store.desiredBusiness} &nbsp;·&nbsp; {FLOOR_LABELS[store.floor]} &nbsp;·&nbsp; {store.areaPyeong}평
+                  </p>
+                </div>
+
+                {/* Right: grade plate */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                  <div style={{
+                    width: 120, height: 120,
+                    border: `2px solid ${gh.border}`,
+                    borderRadius: 20,
+                    background: gh.glow,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: `0 0 40px ${gh.glow}, 0 0 80px ${gh.glow.replace('0.18', '0.08')}`,
+                    backdropFilter: 'blur(6px)',
+                    marginBottom: 8,
+                  }}>
+                    <span style={{
+                      fontFamily: "'Noto Serif KR', serif",
+                      fontSize: '3rem', fontWeight: 900, color: gh.text, lineHeight: 1,
+                    }}>
+                      {analysis.overallGrade}
+                    </span>
+                    <div style={{ width: 32, height: 1, background: `${gh.border}`, margin: '6px 0' }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: gh.text, opacity: 0.65 }}>{analysis.overallScore}점</span>
+                  </div>
+                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.18em', textAlign: 'center' }}>종합 등급</p>
+                </div>
+              </div>
+
+              {/* Meta row (date + recommendation) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 28, marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.055)' }}>
+                <div>
+                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>분석일</p>
+                  <p style={{ fontSize: 13, color: '#B8AFA6', fontWeight: 600 }}>{createdDate}</p>
+                </div>
+                <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.07)' }} />
+                <div>
+                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>종합 판정</p>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', padding: '5px 14px',
+                    border: `1px solid ${rh.border}`, borderRadius: 100,
+                    background: `${rh.border.replace('0.35', '0.08')}`,
+                  }}>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: rh.text, letterSpacing: '0.04em' }}>{rh.label}</span>
+                  </div>
+                </div>
+                <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.07)' }} />
+                <div>
+                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 5 }}>리포트 구성</p>
+                  <p style={{ fontSize: 13, color: '#B8AFA6', fontWeight: 600 }}>9페이지</p>
+                </div>
+              </div>
             </div>
-            <div className="flex items-end justify-between mt-10">
-              <div className="space-y-1">
-                <p className="text-[#5A5148] text-[9px] uppercase tracking-widest">분석일</p>
-                <p className="text-[#C8BFB2] text-sm font-semibold">{createdDate}</p>
-                <div className={`mt-3 inline-flex items-center px-3.5 py-1.5 rounded-full border ${rc.border} ${rc.bg}`}>
-                  <span className={`text-[11px] font-bold ${rc.text}`}>{RECOMMENDATION_LABELS[analysis.recommendation]}</span>
+
+            {/* Key metrics bar */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+              borderTop: '1px solid rgba(255,255,255,0.055)',
+              marginTop: 28, position: 'relative', zIndex: 1,
+            }}>
+              {coverMetrics.map((m, i) => (
+                <div key={i} style={{
+                  padding: '18px 24px',
+                  borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.055)' : 'none',
+                  background: m.alert ? 'rgba(194,74,44,0.06)' : 'transparent',
+                }}>
+                  <p style={{ fontSize: 9, color: '#3D3530', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>{m.label}</p>
+                  <p style={{
+                    fontSize: '1.4rem', fontWeight: 900, lineHeight: 1,
+                    color: m.alert ? '#E07050' : '#C8BFB2',
+                    fontFamily: "'Noto Serif KR', serif", marginBottom: 6,
+                  }}>{m.value}</p>
+                  <p style={{ fontSize: 9, color: m.alert ? '#7A3520' : '#3D3530' }}>{m.sub}</p>
+                  {m.alert && (
+                    <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#E07050', flexShrink: 0 }} />
+                      <span style={{ fontSize: 8, color: '#E07050', fontWeight: 700, letterSpacing: '0.05em' }}>주의 구간</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="text-right">
-                <div className={`w-28 h-28 rounded-3xl border-2 ${gc.border} ${gc.bg} flex flex-col items-center justify-center shadow-lg`}>
-                  <span className={`text-[2.8rem] font-black ${gc.text} leading-none`} style={{ fontFamily: "'Noto Serif KR', serif" }}>{analysis.overallGrade}</span>
-                  <span className={`text-[11px] font-bold ${gc.text} opacity-60 mt-1`}>{analysis.overallScore}점</span>
-                </div>
-                <p className="text-[#5A5148] text-[9px] mt-2 uppercase tracking-widest">종합 등급</p>
-              </div>
+              ))}
             </div>
           </div>
 
