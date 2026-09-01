@@ -19,7 +19,7 @@ export function MockupCard({
   return (
     <div style={{
       background: '#fff', border: '1px solid #E0DED9', borderRadius: 16,
-      padding: 24, boxShadow: '0 8px 32px rgba(0,0,0,0.10)', maxWidth: 320,
+      padding: 24, boxShadow: '0 8px 32px rgba(0,0,0,0.10)', width: '100%', maxWidth: 380,
       fontFamily: 'Pretendard, sans-serif',
     }}>
       <div style={{ fontSize: 10, color: '#999', marginBottom: 10, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
