@@ -71,6 +71,8 @@ export default function LandingPage() {
   return (
     <div style={{ ...TOKENS, fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif', color: 'var(--ink)', background: 'var(--white)', overflowX: 'hidden' } as React.CSSProperties}>
       <style>{`
+        html, body { overflow-x: hidden; max-width: 100%; }
+        *, *::before, *::after { box-sizing: border-box; }
         @keyframes ticker-slide {
           from { transform: translateX(0); }
           to   { transform: translateX(-50%); }
@@ -149,6 +151,10 @@ export default function LandingPage() {
         @media (max-width: 767px) {
           .l-page-bottom { padding-bottom: 80px; }
         }
+        /* Nav CTA button compact on very narrow screens */
+        @media (max-width: 400px) {
+          .l-nav-cta { font-size: 12px !important; padding: 6px 10px !important; }
+        }
       `}</style>
 
       {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
@@ -179,7 +185,7 @@ export default function LandingPage() {
               textDecoration: 'none', padding: '7px 14px', borderRadius: 8,
               border: '1px solid var(--gray-mid)', transition: 'background 0.15s',
             }}>로그인</Link>
-            <Link href="/store/new" style={{
+            <Link href="/store/new" className="l-nav-cta" style={{
               fontSize: 13, fontWeight: 700, color: 'white',
               textDecoration: 'none', padding: '7px 16px', borderRadius: 8,
               background: 'var(--accent)', whiteSpace: 'nowrap',
@@ -221,10 +227,10 @@ export default function LandingPage() {
               <p style={{ fontSize: 13, color: '#aaa' }}>신용카드 불필요 · 회원가입 없이 시작</p>
             </div>
             {/* Right: mockup */}
-            <div className="l-hero-visual" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <div className="l-hero-visual" style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
               <div style={{ position: 'relative', width: '100%', maxWidth: 420 }}>
                 <div style={{
-                  position: 'absolute', inset: -24, background: 'var(--accent-light)',
+                  position: 'absolute', inset: -16, background: 'var(--accent-light)',
                   borderRadius: 36, zIndex: 0,
                 }} />
                 <div style={{ position: 'relative', zIndex: 1 }}>
