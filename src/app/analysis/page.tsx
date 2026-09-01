@@ -68,9 +68,10 @@ const inputClass = `w-full px-3 py-2 text-sm border border-[#E0DED9] rounded-lg
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-        <h3 className="text-sm font-semibold text-slate-700">{title}</h3>
+    <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-[#E0DED9] flex items-center gap-3">
+        <div className="w-[3px] h-5 rounded-full bg-[#C24A2C] shrink-0" />
+        <h3 className="text-sm font-bold text-[#0A0A0A]">{title}</h3>
       </div>
       <div className="p-6">{children}</div>
     </div>
@@ -188,11 +189,12 @@ export default function AnalysisPage() {
       </div>
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">
+      <div className="mb-10">
+        <p className="text-[11px] font-black text-[#C24A2C] tracking-[0.2em] uppercase mb-3">점포 입지 분석</p>
+        <h1 className="text-[1.85rem] font-bold text-[#0A0A0A] leading-tight mb-3">
           이 점포에서 이 업종, 괜찮을까요?
         </h1>
-        <p className="text-slate-500 text-sm leading-relaxed">
+        <p className="text-[#666] text-sm leading-relaxed max-w-lg">
           검토 중인 점포와 희망 업종을 입력하면 상권데이터와 점포조건을 함께 분석합니다.
         </p>
       </div>

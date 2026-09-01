@@ -25,22 +25,19 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-          <Settings className="w-6 h-6 text-slate-600" />
-          설정
-        </h1>
-        <p className="text-slate-500 text-sm">상권연구소 AI PRO V0.1 설정 페이지입니다.</p>
+      <div className="mb-10">
+        <p className="text-[11px] font-black text-[#C24A2C] tracking-[0.2em] uppercase mb-3">시스템 설정</p>
+        <h1 className="text-[1.85rem] font-bold text-[#0A0A0A] leading-tight mb-3">설정</h1>
+        <p className="text-[#666] text-sm">상권연구소 AI PRO V0.1 설정 페이지입니다.</p>
       </div>
 
       <div className="space-y-6">
         {/* Service status */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-            <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <Info className="w-4 h-4 text-[#C24A2C]" />
-              서비스 상태
-            </h3>
+        <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-[#E0DED9] flex items-center gap-3">
+            <div className="w-[3px] h-5 rounded-full bg-[#C24A2C] shrink-0" />
+            <Info className="w-4 h-4 text-[#C24A2C]" />
+            <h3 className="text-sm font-bold text-[#0A0A0A]">서비스 상태</h3>
           </div>
           <div className="px-6">
             <SettingRow
@@ -61,12 +58,11 @@ export default function SettingsPage() {
         </div>
 
         {/* Database */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-            <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <Database className="w-4 h-4 text-slate-500" />
-              데이터 저장
-            </h3>
+        <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-[#E0DED9] flex items-center gap-3">
+            <div className="w-[3px] h-5 rounded-full bg-[#C24A2C] shrink-0" />
+            <Database className="w-4 h-4 text-slate-500" />
+            <h3 className="text-sm font-bold text-[#0A0A0A]">데이터 저장</h3>
           </div>
           <div className="px-6">
             <SettingRow
@@ -103,12 +99,11 @@ export default function SettingsPage() {
         </div>
 
         {/* AI */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-            <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <BrainCircuit className="w-4 h-4 text-slate-500" />
-              AI 분석 엔진
-            </h3>
+        <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-[#E0DED9] flex items-center gap-3">
+            <div className="w-[3px] h-5 rounded-full bg-[#C24A2C] shrink-0" />
+            <BrainCircuit className="w-4 h-4 text-slate-500" />
+            <h3 className="text-sm font-bold text-[#0A0A0A]">AI 분석 엔진</h3>
           </div>
           <div className="px-6">
             <SettingRow

@@ -72,28 +72,28 @@ function MiniStoreForm({ label, form }: { label: 'A' | 'B'; form: ReturnType<typ
   const labelColor = label === 'A' ? 'bg-blue-600' : 'bg-emerald-600'
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-2.5">
-        <div className={`w-6 h-6 ${labelColor} rounded-full flex items-center justify-center`}>
+    <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-[#E0DED9] flex items-center gap-2.5">
+        <div className={`w-6 h-6 ${labelColor} rounded-full flex items-center justify-center shrink-0`}>
           <span className="text-white text-xs font-black">{label}</span>
         </div>
-        <h3 className="text-sm font-semibold text-slate-700">후보 {label}</h3>
+        <h3 className="text-sm font-bold text-[#0A0A0A]">후보 {label}</h3>
       </div>
       <div className="p-5 space-y-3">
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">주소 <span className="text-red-500">*</span></label>
+          <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">주소 <span className="text-red-500">*</span></label>
           <input {...register('address')} placeholder="예: 천안시 서북구 두정동 877" className={inputClass} />
           {errors.address && <p className="text-xs text-red-500 mt-0.5">{errors.address.message}</p>}
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">희망 업종 <span className="text-red-500">*</span></label>
+          <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">희망 업종 <span className="text-red-500">*</span></label>
           <input {...register('desiredBusiness')} placeholder="주점, 카페, 음식점 등" className={inputClass} />
           {errors.desiredBusiness && <p className="text-xs text-red-500 mt-0.5">{errors.desiredBusiness.message}</p>}
         </div>
 
         <div className="grid grid-cols-3 gap-2">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">층수</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">층수</label>
             <select {...register('floor')} className={selectClass}>
               <option value="basement">지하</option>
               <option value="1f">1층</option>
@@ -103,28 +103,28 @@ function MiniStoreForm({ label, form }: { label: 'A' | 'B'; form: ReturnType<typ
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">면적(평)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">면적(평)</label>
             <input {...register('areaPyeong')} type="number" min="1" placeholder="45" className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">전면폭(m)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">전면폭(m)</label>
             <input {...register('frontageMeters')} type="number" step="0.5" placeholder="8" className={inputClass} />
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">가시성</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">가시성</label>
             <select {...register('visibility')} className={selectClass}>
               {accessOpts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">주차(대)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">주차(대)</label>
             <input {...register('parkingCount')} type="number" min="0" placeholder="3" className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">코너여부</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">코너여부</label>
             <button
               type="button"
               onClick={() => setValue('isCorner', !isCorner)}
@@ -137,25 +137,25 @@ function MiniStoreForm({ label, form }: { label: 'A' | 'B'; form: ReturnType<typ
 
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">보증금(만원)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">보증금(만원)</label>
             <input {...register('depositMan')} type="number" min="0" placeholder="5000" className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">월세(만원)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">월세(만원)</label>
             <input {...register('monthlyRentMan')} type="number" min="0" placeholder="350" className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">관리비(만원)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">관리비(만원)</label>
             <input {...register('maintenanceFeeMan')} type="number" min="0" placeholder="0" className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">권리금(만원)</label>
+            <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">권리금(만원)</label>
             <input {...register('premiumMan')} type="number" min="0" placeholder="0" className={inputClass} />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">도보 접근성</label>
+          <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">도보 접근성</label>
           <select {...register('walkAccess')} className={selectClass}>
             {accessOpts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -380,12 +380,12 @@ export default function ComparePage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-          <GitCompare className="w-6 h-6 text-[#C24A2C]" />
-          어느 점포가 이 업종에 더 적합할까요?
+      <div className="mb-10">
+        <p className="text-[11px] font-black text-[#C24A2C] tracking-[0.2em] uppercase mb-3">후보지 비교 분석</p>
+        <h1 className="text-[1.85rem] font-bold text-[#0A0A0A] leading-tight mb-3">
+          어느 점포가 더 적합할까요?
         </h1>
-        <p className="text-slate-500 text-sm">두 후보 점포를 동일한 기준으로 비교합니다. 주소와 조건을 입력하세요.</p>
+        <p className="text-[#666] text-sm">두 후보 점포를 동일한 기준으로 비교합니다. 주소와 조건을 입력하세요.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

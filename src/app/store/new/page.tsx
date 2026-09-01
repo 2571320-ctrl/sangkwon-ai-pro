@@ -30,10 +30,11 @@ function Toggle({ label, value, onChange }: { label: string; value: boolean; onC
 
 function Card({ title, icon: Icon, iconColor, children }: { title: string; icon: React.ElementType; iconColor: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/60 flex items-center gap-2.5">
+    <div className="bg-white border border-[#E0DED9] rounded-2xl overflow-hidden shadow-sm">
+      <div className="px-5 py-4 border-b border-[#E0DED9] flex items-center gap-3">
+        <div className="w-[3px] h-5 rounded-full bg-[#C24A2C] shrink-0" />
         <Icon className={`w-4 h-4 ${iconColor}`} />
-        <h3 className="text-sm font-bold text-slate-700">{title}</h3>
+        <h3 className="text-sm font-bold text-[#0A0A0A]">{title}</h3>
       </div>
       <div className="p-5 space-y-4">{children}</div>
     </div>
@@ -43,8 +44,8 @@ function Card({ title, icon: Icon, iconColor, children }: { title: string; icon:
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-slate-600 mb-1">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+      <label className="block text-[11px] font-bold text-[#555] tracking-wide uppercase mb-1.5">
+        {label}{required && <span className="text-[#C24A2C] ml-0.5">*</span>}
       </label>
       {children}
     </div>
@@ -164,10 +165,11 @@ export default function StoreNewPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">점포 정보 입력</h1>
-        <p className="text-slate-500 text-sm">분석할 점포의 정보를 입력하면 즉시 상권·입지 분석을 시작합니다.</p>
+    <div className="max-w-4xl mx-auto px-4 pt-10 pb-12">
+      <div className="mb-10">
+        <p className="text-[11px] font-black text-[#C24A2C] tracking-[0.2em] uppercase mb-3">점포 입지 분석 시스템</p>
+        <h1 className="text-[1.85rem] font-bold text-[#0A0A0A] leading-tight mb-3">점포 정보 입력</h1>
+        <p className="text-[#666] text-sm leading-relaxed max-w-lg">분석할 점포의 정보를 입력하면 즉시 상권·입지 분석을 시작합니다.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -335,14 +337,16 @@ export default function StoreNewPage() {
       </div>
 
       {/* Submit */}
-      <div className="mt-6 flex items-center justify-between">
-        <p className="text-xs text-slate-400">* 표시 항목은 필수 입력입니다. 나머지는 선택 사항이며 입력할수록 분석 정확도가 높아집니다.</p>
+      <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-[#E0DED9]">
+        <p className="text-xs text-[#999] leading-relaxed max-w-xs">
+          <span className="text-[#C24A2C] font-bold">*</span> 표시 항목은 필수입니다. 나머지는 선택 사항이며 입력할수록 분석 정확도가 높아집니다.
+        </p>
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#C24A2C] text-white text-sm font-semibold hover:bg-[#A83D23] transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#C24A2C] text-white text-sm font-bold hover:bg-[#A83D23] transition-colors disabled:opacity-60 shadow-sm shrink-0"
         >
-          {submitting ? '분석 중…' : '분석 시작'}
+          {submitting ? '분석 중…' : '상권·입지 분석 시작'}
           {!submitting && <ChevronRight className="w-4 h-4" />}
         </button>
       </div>

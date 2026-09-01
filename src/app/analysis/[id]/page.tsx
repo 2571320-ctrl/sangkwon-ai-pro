@@ -35,19 +35,20 @@ function SectionCard({
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm overflow-hidden">
       <button
         onClick={() => setOpen(v => !v)}
-        className="w-full flex items-center justify-between px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between px-6 py-4 border-b border-[#E0DED9] hover:bg-[#F9F8F6] transition-colors"
       >
         <div className="flex items-center gap-2.5">
+          <div className="w-[3px] h-5 rounded-full bg-[#C24A2C] shrink-0" />
           {cardLabel && (
-            <span className="text-[10px] font-black text-white bg-slate-700 rounded px-1.5 py-0.5">{cardLabel}</span>
+            <span className="text-[10px] font-black text-white bg-[#0A0A0A] rounded px-1.5 py-0.5">{cardLabel}</span>
           )}
           <Icon className={`w-4 h-4 ${iconColor}`} />
-          <h3 className="font-semibold text-slate-800 text-sm">{title}</h3>
+          <h3 className="font-bold text-[#0A0A0A] text-sm">{title}</h3>
           {badge && (
-            <span className="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{badge}</span>
+            <span className="text-[10px] font-bold bg-[#F4EBE7] text-[#C24A2C] px-2 py-0.5 rounded-full">{badge}</span>
           )}
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
@@ -205,8 +206,8 @@ export default function AnalysisResultPage() {
       </div>
 
       {/* 분석 대상 정보 요약 */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">분석 대상</p>
+      <div className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm p-5">
+        <p className="text-[10px] font-black text-[#C24A2C] tracking-[0.15em] uppercase mb-3">분석 대상</p>
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">

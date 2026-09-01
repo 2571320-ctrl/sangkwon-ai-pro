@@ -26,13 +26,14 @@ export default function HistoryPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">분석 기록</h1>
-        <p className="text-slate-500 text-sm">이전에 분석한 점포 목록입니다.</p>
+      <div className="mb-10">
+        <p className="text-[11px] font-black text-[#C24A2C] tracking-[0.2em] uppercase mb-3">분석 히스토리</p>
+        <h1 className="text-[1.85rem] font-bold text-[#0A0A0A] leading-tight mb-3">분석 기록</h1>
+        <p className="text-[#666] text-sm">이전에 분석한 점포 목록입니다.</p>
       </div>
 
       {items.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
+        <div className="bg-white border border-[#E0DED9] rounded-2xl p-12 text-center">
           <Clock className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500 text-sm font-medium mb-1">분석 기록이 없습니다</p>
           <p className="text-slate-400 text-xs mb-4">점포를 분석하면 여기에 기록이 쌓입니다.</p>
@@ -48,7 +49,7 @@ export default function HistoryPage() {
               <Link
                 key={analysis.id}
                 href={`/analysis/${analysis.id}`}
-                className="block bg-white border border-slate-200 rounded-xl shadow-sm p-5 hover:border-slate-300 hover:shadow transition-all group"
+                className="block bg-white border border-[#E0DED9] rounded-2xl shadow-sm p-5 hover:border-[#C24A2C]/30 hover:shadow-md transition-all group"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">

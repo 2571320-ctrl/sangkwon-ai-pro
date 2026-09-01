@@ -18,13 +18,14 @@ export default function ReportListPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">고객 리포트</h1>
-        <p className="text-slate-500 text-sm">분석 결과를 고객용 리포트로 출력합니다.</p>
+      <div className="mb-10">
+        <p className="text-[11px] font-black text-[#C24A2C] tracking-[0.2em] uppercase mb-3">분석 결과 리포트</p>
+        <h1 className="text-[1.85rem] font-bold text-[#0A0A0A] leading-tight mb-3">고객 리포트</h1>
+        <p className="text-[#666] text-sm">분석 결과를 고객용 리포트로 출력합니다.</p>
       </div>
 
       {items.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
+        <div className="bg-white border border-[#E0DED9] rounded-2xl p-12 text-center">
           <FileText className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-500 text-sm font-medium mb-4">생성된 리포트가 없습니다</p>
           <Link href="/analysis" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C24A2C] hover:bg-[#A83D23] text-white text-sm font-semibold">
@@ -36,7 +37,7 @@ export default function ReportListPage() {
           {items.map(({ analysis, store }) => {
             const gc = gradeColor(analysis.overallGrade)
             return (
-              <div key={analysis.id} className="bg-white border border-slate-200 rounded-xl shadow-sm p-5 flex items-center gap-4">
+              <div key={analysis.id} className="bg-white border border-[#E0DED9] rounded-2xl shadow-sm p-5 flex items-center gap-4">
                 <div className={`rounded-xl px-3 py-2 text-center border ${gc.border} ${gc.bg} shrink-0`}>
                   <div className={`text-xl font-black ${gc.text}`}>{analysis.overallGrade}</div>
                 </div>

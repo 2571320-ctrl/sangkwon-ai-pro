@@ -41,18 +41,18 @@ export function MobileLayout({ children }: { children: React.ReactNode }) {
       {/* 메인 영역 */}
       <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
         {/* 모바일 상단바 */}
-        <header className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-slate-100 bg-white shrink-0">
+        <header className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-[#E0DED9] bg-[#F4F3F0] shrink-0">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-[#555] hover:bg-[#E0DED9] transition-colors"
             aria-label="메뉴 열기"
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="font-bold text-sm text-slate-800">상권연구소 AI PRO</span>
+          <span className="font-bold text-sm text-[#0A0A0A]">상권연구소 AI PRO</span>
         </header>
 
-        <main id="main-scroll" className="flex-1 overflow-y-auto">
+        <main id="main-scroll" className="flex-1 overflow-y-auto bg-[#F4F3F0]">
           {children}
         </main>
       </div>
