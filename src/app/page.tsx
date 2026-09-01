@@ -69,7 +69,7 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div style={{ ...TOKENS, fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif', color: 'var(--ink)', background: 'var(--white)' } as React.CSSProperties}>
+    <div style={{ ...TOKENS, fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif', color: 'var(--ink)', background: 'var(--white)', overflowX: 'hidden' } as React.CSSProperties}>
       <style>{`
         @keyframes ticker-slide {
           from { transform: translateX(0); }
@@ -112,6 +112,21 @@ export default function LandingPage() {
         .vs-check { color: #27AE60; font-weight: 700; }
         .vs-cross { color: #BDC3C7; }
         .vs-half  { color: #E67E22; }
+        /* Nav links: desktop only */
+        .l-nav-links { display: none; }
+        @media (min-width: 768px) {
+          .l-nav-links { display: flex !important; }
+        }
+        /* Nav login button: desktop only */
+        .l-nav-login { display: none; }
+        @media (min-width: 768px) {
+          .l-nav-login { display: inline-flex !important; }
+        }
+        /* Sticky CTA bar: mobile only */
+        .l-mobile-cta { display: block; }
+        @media (min-width: 768px) {
+          .l-mobile-cta { display: none !important; }
+        }
         /* Responsive overrides */
         @media (max-width: 820px) {
           .l-hero-grid    { grid-template-columns: 1fr !important; gap: 32px !important; }
@@ -124,11 +139,11 @@ export default function LandingPage() {
           .l-footer-inner { flex-direction: column !important; gap: 20px !important; }
         }
         @media (max-width: 640px) {
-          .l-process-grid { grid-template-columns: 1fr !important; }
-          .l-hero-cta     { flex-direction: column !important; align-items: flex-start !important; }
-          .l-btn-primary  { width: 100%; justify-content: center; }
-          .l-btn-secondary{ width: 100%; justify-content: center; }
-          .l-pricing-grid { gap: 12px !important; }
+          .l-process-grid  { grid-template-columns: 1fr !important; }
+          .l-hero-cta      { flex-direction: column !important; align-items: stretch !important; }
+          .l-btn-primary   { width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
+          .l-btn-secondary { width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
+          .l-pricing-grid  { gap: 12px !important; }
         }
         /* Mobile bottom padding for sticky bars */
         @media (max-width: 767px) {
@@ -151,15 +166,15 @@ export default function LandingPage() {
             <span style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)' }}>상권연구소 AI</span>
             <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', background: 'var(--accent-light)', borderRadius: 4, padding: '2px 7px', letterSpacing: '0.04em' }}>PRO</span>
           </Link>
-          {/* Desktop nav links */}
-          <div style={{ flex: 1, display: 'flex', gap: 28, alignItems: 'center' }} className="hidden md:flex">
+          {/* Desktop nav links — hidden on mobile via l-nav-links class */}
+          <div style={{ flex: 1, gap: 28, alignItems: 'center' }} className="l-nav-links">
             <a href="#process" className="l-nav-link">서비스 소개</a>
             <a href="#pricing" className="l-nav-link">가격</a>
             <a href="#faq" className="l-nav-link">FAQ</a>
           </div>
           {/* CTAs */}
           <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
-            <Link href="/chat" style={{
+            <Link href="/chat" className="l-nav-login" style={{
               fontSize: 13, fontWeight: 600, color: 'var(--ink)',
               textDecoration: 'none', padding: '7px 14px', borderRadius: 8,
               border: '1px solid var(--gray-mid)', transition: 'background 0.15s',
@@ -167,7 +182,7 @@ export default function LandingPage() {
             <Link href="/store/new" style={{
               fontSize: 13, fontWeight: 700, color: 'white',
               textDecoration: 'none', padding: '7px 16px', borderRadius: 8,
-              background: 'var(--accent)',
+              background: 'var(--accent)', whiteSpace: 'nowrap',
             }}>무료 진단 시작</Link>
           </div>
         </div>
@@ -583,7 +598,7 @@ export default function LandingPage() {
       </footer>
 
       {/* ══ STICKY CTA BAR (mobile only) ════════════════════════════════════ */}
-      <div className="md:hidden" style={{
+      <div className="l-mobile-cta" style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 90,
         background: 'white', borderTop: '1px solid var(--gray-mid)',
         padding: '10px 16px',
