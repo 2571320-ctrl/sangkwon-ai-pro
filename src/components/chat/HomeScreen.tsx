@@ -126,14 +126,14 @@ export function HomeScreen({ onSubmit, disabled }: HomeScreenProps) {
       className="flex flex-col items-center justify-center min-h-full px-4"
       style={{
         background:
-          'radial-gradient(circle at 50% 42%, #E6F0FB 0%, #EFF5FC 25%, #F5F9FD 55%, #FAFCFE 80%, #FFFFFF 100%)',
+          'radial-gradient(circle at 50% 42%, #F4EBE7 0%, #F4F3F0 25%, #F9F8F6 55%, #FDFCFB 80%, #FFFFFF 100%)',
         paddingTop:    'clamp(3rem, 10vh, 6rem)',
         paddingBottom: 'clamp(3rem, 8vh, 5rem)',
       }}
     >
       {/* Brand label */}
       <div className="flex items-center gap-2 mb-8">
-        <div className="w-7 h-7 bg-[#0B1120] rounded-[9px] flex items-center justify-center shadow-sm">
+        <div className="w-7 h-7 bg-[#0A0A0A] rounded-[9px] flex items-center justify-center shadow-sm">
           <BarChart3 className="w-3.5 h-3.5 text-white" />
         </div>
         <span className="text-sm font-semibold text-[#0B1120] tracking-wide">
@@ -165,8 +165,8 @@ export function HomeScreen({ onSubmit, disabled }: HomeScreenProps) {
         <div
           className={`bg-white transition-all duration-150 ${
             isDragging
-              ? 'rounded-[26px] border-2 border-blue-300 shadow-[0_0_0_4px_rgba(59,130,246,0.08)]'
-              : 'rounded-[26px] border border-slate-200 shadow-[0_2px_20px_rgba(15,23,42,0.07)] focus-within:border-slate-300/80 focus-within:shadow-[0_4px_28px_rgba(15,23,42,0.11)]'
+              ? 'rounded-[26px] border-2 border-[#C24A2C] shadow-[0_0_0_4px_rgba(194,74,44,0.08)]'
+              : 'rounded-[26px] border border-[#E0DED9] shadow-[0_2px_20px_rgba(10,10,10,0.07)] focus-within:border-[#C24A2C]/40 focus-within:shadow-[0_4px_28px_rgba(10,10,10,0.11)]'
           }`}
           onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
           onDragLeave={e => { e.preventDefault(); setIsDragging(false) }}
@@ -174,7 +174,7 @@ export function HomeScreen({ onSubmit, disabled }: HomeScreenProps) {
         >
           {/* Drag overlay */}
           {isDragging && (
-            <div className="flex items-center justify-center gap-2 px-6 py-8 text-sm text-blue-400">
+            <div className="flex items-center justify-center gap-2 px-6 py-8 text-sm text-[#C24A2C]">
               <ImageIcon className="w-4 h-4" />
               파일을 여기에 놓으세요
             </div>
@@ -239,7 +239,7 @@ export function HomeScreen({ onSubmit, disabled }: HomeScreenProps) {
               <button
                 onClick={submit}
                 disabled={!canSubmit}
-                className="w-10 h-10 rounded-[14px] bg-[#0B1120] text-white flex items-center justify-center hover:bg-slate-800 transition-colors disabled:opacity-25 disabled:cursor-not-allowed shrink-0 mb-0.5"
+                className="w-10 h-10 rounded-[14px] bg-[#C24A2C] text-white flex items-center justify-center hover:bg-[#A83D23] transition-colors disabled:opacity-25 disabled:cursor-not-allowed shrink-0 mb-0.5"
                 aria-label="전송"
               >
                 <Send className="w-4 h-4" />

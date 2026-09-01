@@ -126,8 +126,8 @@ export function InputBar({ onSubmit, disabled }: InputBarProps) {
         <div
           className={`bg-white border rounded-2xl shadow-sm transition-all ${
             isDragging
-              ? 'border-blue-400 ring-2 ring-blue-100'
-              : 'border-slate-300 focus-within:border-slate-400'
+              ? 'border-[#C24A2C] ring-2 ring-[#F4EBE7]'
+              : 'border-[#E0DED9] focus-within:border-[#C24A2C]/50'
           }`}
           onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
           onDragLeave={e => { e.preventDefault(); setIsDragging(false) }}
@@ -135,7 +135,7 @@ export function InputBar({ onSubmit, disabled }: InputBarProps) {
         >
           {/* Drag-over overlay */}
           {isDragging && (
-            <div className="flex items-center justify-center gap-2 px-4 py-4 text-sm text-blue-400">
+            <div className="flex items-center justify-center gap-2 px-4 py-4 text-sm text-[#C24A2C]">
               <ImageIcon className="w-4 h-4" />
               파일을 여기에 놓으세요
             </div>
@@ -199,7 +199,7 @@ export function InputBar({ onSubmit, disabled }: InputBarProps) {
               <button
                 onClick={submit}
                 disabled={!canSubmit}
-                className="w-8 h-8 rounded-xl bg-[#0f172a] text-white flex items-center justify-center hover:bg-slate-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
+                className="w-8 h-8 rounded-xl bg-[#C24A2C] text-white flex items-center justify-center hover:bg-[#A83D23] transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
                 aria-label="전송"
               >
                 <Send className="w-3.5 h-3.5" />

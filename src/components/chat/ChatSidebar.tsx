@@ -31,12 +31,12 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
   const activeId = pathname.startsWith('/chat/') ? pathname.slice(6) : undefined
 
   return (
-    <aside className="w-64 shrink-0 flex flex-col h-full bg-[#f0f4f9] border-r border-slate-200">
+    <aside className="w-64 shrink-0 flex flex-col h-full bg-[#F4F3F0] border-r border-[#E0DED9]">
       {/* Logo + new chat */}
       <div className="px-3 pt-5 pb-3">
         <div className="flex items-center justify-between mb-4 px-2">
           <Link href="/chat" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-[#0f172a] rounded-xl flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 bg-[#0A0A0A] rounded-xl flex items-center justify-center shrink-0">
               <BarChart3 className="w-4 h-4 text-white" />
             </div>
             <div className="leading-tight">
@@ -56,14 +56,14 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
 
         <Link
           href="/store/new"
-          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-[#C24A2C] text-white text-sm font-medium hover:bg-[#A83D23] transition-colors"
         >
           <FileInput className="w-4 h-4" />
           새 점포 분석 시작
         </Link>
         <Link
           href="/chat"
-          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-[#0f172a] text-white text-sm font-medium hover:bg-slate-800 transition-colors mt-2"
+          className="flex items-center gap-2 w-full px-4 py-2.5 rounded-full bg-[#0A0A0A] text-white text-sm font-medium hover:bg-[#1a1a1a] transition-colors mt-2"
         >
           <Plus className="w-4 h-4" />
           AI에게 질문하기
@@ -85,8 +85,8 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
                   href={`/chat/${conv.id}`}
                   className={`group flex items-center justify-between px-3 py-2 rounded-xl mb-0.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-white shadow-sm text-slate-900'
-                      : 'text-slate-600 hover:bg-white/70 hover:text-slate-900'
+                      ? 'bg-white shadow-sm text-[#0A0A0A]'
+                      : 'text-[#555] hover:bg-white/80 hover:text-[#0A0A0A]'
                   }`}
                 >
                   <div className="flex items-center gap-2 min-w-0">

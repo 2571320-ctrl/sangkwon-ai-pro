@@ -8,7 +8,7 @@ import { generateId } from '@/lib/utils'
 import { Store, FloorType, Visibility, AccessLevel } from '@/types'
 import { MapPin, Building2, Banknote, BarChart3, ChevronRight, Wrench } from 'lucide-react'
 
-const inputClass = `w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors`
+const inputClass = `w-full px-3 py-2 text-sm border border-[#E0DED9] rounded-lg bg-white text-[#0A0A0A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C24A2C]/30 focus:border-[#C24A2C] transition-colors`
 const selectClass = `${inputClass} cursor-pointer`
 
 function Toggle({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
@@ -17,11 +17,11 @@ function Toggle({ label, value, onChange }: { label: string; value: boolean; onC
       type="button"
       onClick={() => onChange(!value)}
       className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
-        value ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-white border-slate-300 text-slate-500'
+        value ? 'bg-[#F4EBE7] border-[#C24A2C] text-[#C24A2C]' : 'bg-white border-[#E0DED9] text-slate-500'
       }`}
     >
       <span>{label}</span>
-      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${value ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>
+      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${value ? 'bg-[#F4EBE7] text-[#C24A2C]' : 'bg-slate-100 text-slate-500'}`}>
         {value ? '예' : '아니오'}
       </span>
     </button>
@@ -172,7 +172,7 @@ export default function StoreNewPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Card 1 */}
-        <Card title="기본정보" icon={MapPin} iconColor="text-blue-500">
+        <Card title="기본정보" icon={MapPin} iconColor="text-[#C24A2C]">
           <Field label="주소" required>
             <input
               value={address}
@@ -340,7 +340,7 @@ export default function StoreNewPage() {
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0f172a] text-white text-sm font-semibold hover:bg-slate-800 transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#C24A2C] text-white text-sm font-semibold hover:bg-[#A83D23] transition-colors disabled:opacity-60"
         >
           {submitting ? '분석 중…' : '분석 시작'}
           {!submitting && <ChevronRight className="w-4 h-4" />}
