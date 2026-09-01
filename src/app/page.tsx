@@ -353,7 +353,7 @@ export default function LandingPage() {
             </h2>
           </div>
           {/* Steps + MockupCard side layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(32px, 5vw, 56px)', alignItems: 'start' }} className="l-process-main">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(32px, 5vw, 56px)', alignItems: 'center' }} className="l-process-main">
             {/* Steps */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }} className="l-process-grid">
               {[
@@ -390,7 +390,7 @@ export default function LandingPage() {
               </div>
             </div>
             {/* MockupCard showcase */}
-            <div style={{ display: 'flex', justifyContent: 'center', position: 'sticky', top: 80, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <div style={{ position: 'relative', width: '100%', maxWidth: 420 }}>
                 <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textAlign: 'center', marginBottom: 12, letterSpacing: '0.06em', textTransform: 'uppercase' }}>분석 결과 미리보기</div>
                 <div style={{
